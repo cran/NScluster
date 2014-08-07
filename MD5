@@ -1,10 +1,10 @@
-7de58039831c0ea9f74616d21049fe27 *DESCRIPTION
+432e00940c2d8297565978bded14fc7f *DESCRIPTION
 fda272677a02211a1d67ebca4a46fa62 *NAMESPACE
 f5290f8ffc72f76c991fac7f54367919 *R/NScluster.R
-918369028a7846489abbd0a8dde42555 *inst/LICENCE
+e0a9e53cb1362fb2d4dca48e1bfe6f8e *inst/AUTHORS
 76b6560e0762c6b2cccffa90ccf0db7e *inst/doc/NScluster-guide.pdf
-646db02121d8f71655793444737debbc *inst/doc/NScluster-manual.pdf
-667f021e09a022a543f5f9e4ddfdb54f *inst/doc/index.html
+917a344e66e5ad32ea6015d82326eeeb *inst/doc/NScluster-manual.pdf
+3a8d50fd06266d0d46514d93b20c3501 *inst/doc/index.html
 57bbbf37c37b7eb89a009e81cea4e4bf *man/NScluster-package.Rd
 1ac50dcbd14ba416ed63289178694fad *man/PalmIP.Rd
 a7d425f7264f6b5dcae8d7a4d78cd4fa *man/PalmThomas.Rd
@@ -12,7 +12,7 @@ ba0d550007df3f1489062f2184cb42eb *man/PalmTypeA.Rd
 6816c6c181ae1759b344ab9a0a7807e9 *man/PalmTypeB.Rd
 395574a617c236bfb5cd568e04580df3 *man/PalmTypeC.Rd
 b62c81769e73982a36bc0719e2761655 *man/SimplexIP.Rd
-b612d07ab26423c367f04e7c39755878 *man/SimplexThomas.Rd
+8397b4130e85f1f0df8f764842455e70 *man/SimplexThomas.Rd
 c1d798fb7ea69223dd3a9764563e1bb4 *man/SimplexTypeA.Rd
 45aab8cc02d21c3eee7bbc88bbb7c7d7 *man/SimplexTypeB.Rd
 38936c86bf0de7909f7f29e0d9220d15 *man/SimplexTypeC.Rd

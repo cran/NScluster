@@ -59,8 +59,11 @@
   mu <- 50;  nu <- 30;  sig <- 0.03
   z <- SimulateThomas( seeds, c(mu,nu,sig) )
 
-  ## estimation
-  SimplexThomas( z$offspring, c(mu,nu,sig), process=3 )
+  \dontrun{
+    ## estimation
+    ## need long c.p.u time in the minimization procedure
+    SimplexThomas( z$offspring, c(mu,nu,sig), process=3 )
+  }
 }
 
 \keyword{spatial}
