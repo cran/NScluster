@@ -5,12 +5,12 @@
   Parameter estimation of Type B Model by using The Palm Log-Likelihood Function.
 }
 \usage{
-  SimplexTypeB(offspring, pa, Ty=1, eps=0.1e-2, process=0, plot=TRUE)
+  SimplexTypeB(offspring, pa, ty=1, eps=0.1e-2, process=0, plot=TRUE)
 }
 \arguments{
   \item{offspring}{the list of coordinates \eqn{(x,y)} of offspring points.}
   \item{pa}{the initial guesses of the parameters \eqn{(\mu_1, \mu_2, \nu, \sigma_1, \sigma_2)}{(mu_1, mu_2, nu, sigma_1, sigma_2)}.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]}
             without loss of generality except for the scaling.}
   \item{eps}{the optimization procedure is iterated at most 1000 times until \code{stderr} becomes smaller than \code{eps}.}
   \item{process}{repot the process of minimizing. Allowed values are
@@ -25,9 +25,9 @@
   \item{plot}{plot the process of optimizing by the simplex with the normalized parameters depending on \code{pa}.}
 }
 \value{
-  \item{logL.p}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
-  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logL.p}.}
-  \item{logL.s}{the minimized -log L by the simplex method.}
+  \item{logl.palm}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
+  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logl.palm}.}
+  \item{logl.simplex}{the minimized -log L by the simplex method.}
   \item{stderr}{the standard deviations.}
   \item{pa.normal}{the normalized variables corresponding to the MPLE values relative to the initial estimates.}
 }
@@ -60,12 +60,13 @@ the ratio of the parent points of the smaller sized cluster to the total ones.
   ## simulation
   seeds <- c(822, 913, 905)
   mu1 <- 10;  mu2 <- 40; nu <- 30;  sig1 <- 0.01;  sig2 <- 0.03
-  z <- SimulateTypeB( seeds, c(mu1,mu2,nu,sig1,sig2), pmax=100, omax=150 )
+  z <- SimulateTypeB(seeds, c(mu1,mu2,nu,sig1,sig2), pmax=100, omax=150)
 
   \dontrun{
     ## estimation
     ## need very long c.p.u time in the minimization procedure
-    SimplexTypeB( z$offspring, c(mu1,mu2,nu,sig1,sig2), process=3 )
+    setOmpNumThreads(2)
+    SimplexTypeB(z$offspring, c(mu1,mu2,nu,sig1,sig2), process=3)
   }
 }
 

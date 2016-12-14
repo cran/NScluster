@@ -5,12 +5,12 @@
   Simulation of the Inverse-Power Type Model.
 }
 \usage{
-  SimulateIP(seeds, pa, Ty=1, pmax=100, omax=3000, plot=TRUE)
+  SimulateIP(seeds, pa, ty=1, pmax=100, omax=3000, plot=TRUE)
 }
 \arguments{
   \item{seeds}{the three positive integer variables, which are initial seeds for a sequence of uniform random numbers.}
   \item{pa}{the parameter values \eqn{(\mu, \nu, p, c)}{(mu, nu, p, c)}.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
   \item{pmax}{maximum number of parent points.}
   \item{omax}{maximum number of offspring points.}
   \item{plot}{logical. If TRUE (default) simulated parent points and offspring points are plotted.}
@@ -54,7 +54,7 @@
 \examples{
   seeds <- c(822, 913, 905)
   mu <- 50;  nu <- 30;  p <- 1.5;  c <- 0.005
-  SimulateIP( seeds, c(mu,nu,p,c) )
+  SimulateIP(seeds, c(mu,nu,p,c))
 }
 
 \keyword{spatial}

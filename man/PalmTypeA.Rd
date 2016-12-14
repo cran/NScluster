@@ -4,13 +4,13 @@
 \description{
   Calculate the non-parametric Palm intensity function of Type A Model estimated directly from a set of point pattern data.}
 \usage{
-  PalmTypeA(offspring, pa, delta, Ty, x2, plot=TRUE)
+  PalmTypeA(offspring, pa, delta, ty, x2, plot=TRUE)
 }
 \arguments{
   \item{offspring}{the list of coordinates \eqn{(x,y)} of offspring points.}
   \item{pa}{the parameters \eqn{(\mu_i, \nu_i, a_i, \sigma_{1,i}, \sigma_{2,i})}{(mu_i, nu_i, a_i, sigma_{1,i}, sigma_{2,i})}, \eqn{i=1,2,...,I \le 7}{i=1,2,...,I <= 7}.}
   \item{delta}{a width for the non-parametric Palm intensity function.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
   \item{x2}{upper limit value in place of \eqn{\infty}.}
   \item{plot}{logical. If TRUE (default) the non-parametric estimate and the curves of the true and MPLE (the maximum Palm likelihood estimator) parameters are shown.}
 }
@@ -31,15 +31,15 @@
   ## simulation
   seeds <- c(822, 913, 905)
   pa1 <- c(50, 30, 0.3, 0.005, 0.1)
-  Ty <- 1
-  z <- SimulateTypeA( seeds, pa1, Ty, 100, 150 )
+  ty <- 1
+  z <- SimulateTypeA(seeds, pa1, ty, 100, 150)
 
   ## estimation
   delta <- 0.001
   x2 <- 0.3
   pa2 <- c(0.5639245e+02, 0.2356894e+02, 0.3549922, 0.5203741e-02, 0.1070969)
   pa <- matrix(c(pa1,pa2), 2, 5, byrow=TRUE) 
-  PalmTypeA( z$offspring, pa, delta, Ty, x2 )
+  PalmTypeA(z$offspring, pa, delta, ty, x2)
 }
 
 \keyword{spatial}

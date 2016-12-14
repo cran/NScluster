@@ -1,8 +1,10 @@
 useDynLib(NScluster)
 
+importFrom("graphics", "abline", "par", "plot", "title", "legend")
+
 export(SimulateThomas, SimulateIP, SimulateTypeA, SimulateTypeB, SimulateTypeC,
        SimplexThomas, SimplexIP, SimplexTypeA, SimplexTypeB, SimplexTypeC,
-       PalmThomas, PalmIP, PalmTypeA, PalmTypeB, PalmTypeC)
+       PalmThomas, PalmIP, PalmTypeA, PalmTypeB, PalmTypeC, setOmpNumThreads)
 
 S3method(print, Simulate)
 S3method(print, Simulate2)

@@ -14,8 +14,6 @@ We adopt the Simplex estimation to maximize the Palm likelihood function.
 \details{
   The documentation 'NScluster: An R Package for Simulation and Estimation of the Neyman-Scott type spatial cluster models' is available in \url{../doc/NScluster-guide.pdf}.
 
-  PDF version of reference manual is  available in \url{../doc/NScluster-manual.pdf}
-
   Simulation :
 
  \code{\link{SimulateThomas}}, \code{\link{SimulateIP}}, \code{\link{SimulateTypeA}}, \code{\link{SimulateTypeB}}
@@ -32,6 +30,7 @@ We adopt the Simplex estimation to maximize the Palm likelihood function.
  Type B model and Type C model are described under the topic \code{\link{SimplexThomas}}, \code{\link{SimplexTypeB}} and \code{\link{SimplexTypeC}}, respectively.
  On the other hand, for \code{\link{SimplexIP}} and \code{\link{SimplexTypeA}},
  we need to take the alternative form without explicit representation of the Palm intensity function, which need very long c.p.u. time in the minimization procedure.
+ We parallelize the minimization procedure with OpenMP.
 
  \code{\link{PalmThomas}}, \code{\link{PalmIP}}, \code{\link{PalmTypeA}}, \code{\link{PalmTypeB}} and \code{\link{PalmTypeC}}
  calculate the non-parametric Palm intensity function estimated directory from a set of point pattern data.

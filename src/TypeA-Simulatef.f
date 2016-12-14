@@ -3,13 +3,18 @@
 c
       include 'NScluster_f.h'
 c
-      implicit real*8 (a-h, o-z)
+cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
 cc      dimension  x(1000), y(1000)
 cc      dimension  xcl(1000,5000), ycl(1000,5000)
-      dimension  x(m), y(m)
-      dimension  xcl(m,n), ycl(m,n)
-      dimension  ncl(m)
+cx      dimension  x(m), y(m)
+cx      dimension  xcl(m,n), ycl(m,n)
+cx      dimension  ncl(m)
+      integer :: ix, iy, iz, npts, m, ncl(m), n, ier
+      real(8) :: ty, amu, anu, a, sig1, sig2, x(m), y(m),
+     1           xcl(m,n), ycl(m,n)
+      real(8) :: pi, r, theta, xclij, yclij, xclij2, yclij2, choice,
+     1           random
 c
       pi=3.14159265358979d0
 c
@@ -52,17 +57,19 @@ c---
 c
 cc          do 35 j=1, ncl
           do 35 j=1, ncl(i)
- 	    r=sqrt(-2*log(random(ix,iy,iz)))
-	    theta=2*pi*(random(ix,iy,iz))	
+            r=sqrt(-2*log(random(ix,iy,iz)))
+            theta=2*pi*(random(ix,iy,iz))
             np=np+1
-	    xclij=x(i)+r*cos(theta)*sig1     
-	    yclij=y(i)+r*sin(theta)*sig1
-	    xclij2=x(i)+r*cos(theta)*sig2     
-	    yclij2=y(i)+r*sin(theta)*sig2
+            xclij=x(i)+r*cos(theta)*sig1     
+            yclij=y(i)+r*sin(theta)*sig1
+            xclij2=x(i)+r*cos(theta)*sig2     
+            yclij2=y(i)+r*sin(theta)*sig2
             jx=int(xclij)  
-            jy=yclij/ty
-            jx2=int(xclij2)  
-            jy2=yclij2/ty
+cx            jy=yclij/ty
+            jy=int(yclij/ty)
+            jx2=int(xclij2)
+cx            jy2=yclij2/ty
+            jy2=int(yclij2/ty)
              if (xclij.le.0) then
                xclij=xclij+(1-jx)
              end if
@@ -97,7 +104,7 @@ cc          do 35 j=1, ncl
           endif
 cc          write(10,*) xcl(i,j), ycl(i,j)
  35   continue
- 11   format(' ',2F10.6)
+cx 11   format(' ',2F10.6)
  25   continue
 cc        write(6,*) '#(total offspring)=', np
 cc      close(10)

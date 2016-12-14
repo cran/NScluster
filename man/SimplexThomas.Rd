@@ -4,12 +4,12 @@
 \description{
   Parameter estimation of the Thomas model by using the Palm log-likelihood function.}
 \usage{
-  SimplexThomas(offspring, pa, Ty=1, eps=0.1e-2, process=0, plot=TRUE)
+  SimplexThomas(offspring, pa, ty=1, eps=0.1e-2, process=0, plot=TRUE)
 }
 \arguments{
   \item{offspring}{the list of coordinates \eqn{(x,y)} of offspring points.}
   \item{pa}{the initial guesses of the parameters \eqn{(\mu, \nu, \sigma)}{(mu, nu, sigma)}.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
   \item{eps}{the optimization procedure is iterated at most 1000 times until \code{stderr} becomes smaller than \code{eps}.}
   \item{process}{repot the process of minimizing. Allowed values are
     \tabular{rl}{
@@ -42,9 +42,9 @@
   with \eqn{R = 1/2} which means the half of the \eqn{t_x} (TX) in side length of the normalized rectangular. 
 }
 \value{
-  \item{logL.p}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
-  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logL.p}.}
-  \item{logL.s}{the minimized -log L by the simplex method.}
+  \item{logl.palm}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
+  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logl.palm}.}
+  \item{logl.simplex}{the minimized -log L by the simplex method.}
   \item{stderr}{the standard deviation.}
   \item{pa.normal}{the normalized variables corresponding to the MPLE values relative to the initial estimates.}
 }
@@ -57,12 +57,13 @@
   ## simulation
   seeds <- c(822, 913, 905)
   mu <- 50;  nu <- 30;  sig <- 0.03
-  z <- SimulateThomas( seeds, c(mu,nu,sig) )
+  z <- SimulateThomas(seeds, c(mu,nu,sig))
 
   \dontrun{
     ## estimation
     ## need long c.p.u time in the minimization procedure
-    SimplexThomas( z$offspring, c(mu,nu,sig), process=3 )
+    setOmpNumThreads(2)
+    SimplexThomas(z$offspring, c(mu,nu,sig), process=3)
   }
 }
 

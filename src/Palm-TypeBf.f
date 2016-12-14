@@ -3,14 +3,20 @@
 c
       include 'NScluster_f.h'
 c
-       implicit real*8(a-h,o-z)
+cx       implicit real*8(a-h,o-z)
 cc       dimension  x(2000),y(2000), RR(4000000)
 cc       dimension  nc(1000),palm(1000),palm1(1000,10)
 cc       common/events/np
-       dimension  x(np),y(np), RR(np*np)
-       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
-       dimension  amu(m), anu(m), a(m), s1(m), s2(m)
+       integer :: np, m, jmax
+       real(8) :: x(np), y(np), delta, ty1, amu(m), anu(m), a(m), 
+     1            s1(m), s2(m), palm(jmax), palm1(jmax,m)
+       real(8) :: tx, ty
+cx       dimension  x(np),y(np), RR(np*np)
+cx       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
+cx       dimension  amu(m), anu(m), a(m), s1(m), s2(m)
        common / sizes / tx,ty
+       integer :: nc(jmax)
+       real(8) :: RR(np*np), pi, t, r, alam, ae1, ae2
 cc       character*50 fname
 cc       open(2,file='TypeBparam.palm')
 cc       read(2,2) fname
@@ -31,7 +37,6 @@ c
 cc       call  bdry(RR,NN,x,y)
        call  bdry(RR,NN,x,y,np)
 c
-
        pi=3.14159265358979d0
        t = np
 c
@@ -41,7 +46,8 @@ cc       do 15 k=1,1000
  15    continue  
 c
        do 25 i=1, NN
-          id=RR(i)/delta+1
+cx          id=RR(i)/delta+1
+          id=int(RR(i)/delta)+1
 cc          nc(id)=nc(id)+1
           if(id.le.jmax)  nc(id)=nc(id)+1
  25    continue       

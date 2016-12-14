@@ -2,7 +2,7 @@
 ********************************************************************************
 * common subroutine
 c
-c     Pois     ---   simThomas, simA, simB, simC, simIp
+c     Pois     ---   simThomas, simA, simB, simC, simIP
 c     random   ---   simThomas, simA, simB, simC, simIP
 c
 c     input    ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
@@ -14,9 +14,13 @@ c     epslon(epsln)   ---    simplexThomas, simplexIP, simplexA, simplexB, simpl
 c     newsim   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     update   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     reduce   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
-c     quad2d   ---    simplexIP, simplexA
-c     qgausx   ---    simplexIP, simplexA
-c     qgausy   ---    simplexIP, simplexA
+ccc     quad2d   ---    simplexIP, simplexA, xqgausIP, xqgausA
+ccc     qgausx   ---    simplexIP, simplexA, xqgausIP, xqgausA
+ccc     qgausy   ---    simplexIP, simplexA, xqgausIP, xqgausA
+c     quad2d   ---    xqgausIP, xqgausA
+c     qgausx   ---    xqgausIP, xqgausA
+c     qgausy   ---    xqgausIP, xqgausA
+
 c
 c-------------------------------------------------------------------------------
 * common function
@@ -31,7 +35,9 @@ c
 *      *** Poisson random number ***
 cc       subroutine Pois(ram,m)
        subroutine Pois(ram,m,ix,iy,iz)
-       implicit real*8(a-h,o-z)
+cx       implicit real*8(a-h,o-z)
+      integer :: m, ix, iy, iz
+      real(8) :: ram, alogu, u, random
 cc       common ix,iy,iz
        alogu=ram
        m=0
@@ -47,9 +53,11 @@ c
        end
 ********************************************************************************
 cc      real function random*8(ix,iy,iz)
-      real*8 function random(ix,iy,iz)
+cx      real*8 function random(ix,iy,iz)
+      double precision function random(ix,iy,iz)
 c     WICHMANN+HILL Appl.Statist.(JRSSC) (31) 188-(1982)
-      implicit real*8(a-h,o-z)
+cx      implicit real*8(a-h,o-z)
+      integer :: ix, iy, iz
       ix=171*mod(ix,177)-2*(ix/177)
       iy=172*mod(iy,176)-35*(iy/176)
       iz=170*mod(iz,178)-63*(iz/178)
@@ -58,23 +66,28 @@ c     WICHMANN+HILL Appl.Statist.(JRSSC) (31) 188-(1982)
       if(iz.lt.0)  iz=iz+30323
       random=mod(float(ix)/30269.0+float(iy)/30307.0
      &                            +1-float(iz)/30323.0,1.0)
-      crandom=float(ix)/30269.0+float(iy)/30307.0+1-float(iz)/30323.0
+cx      crandom=float(ix)/30269.0+float(iy)/30307.0+1-float(iz)/30323.0
       return
-      end	
+      end
 ********************************************************************************
 cc      subroutine input
       subroutine input(x,y,n,tx,ty,rr,nn)
-      implicit real * 8 (a-h,o-z)
+cx      implicit real * 8 (a-h,o-z)
+      integer :: n, nn
+      real(8) :: x(n), y(n), tx, ty, rr(n**2)
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
-      dimension rr(n**2)
+cx      dimension rr(n**2)
+      real(8) :: ff, aic, rmin, rmax
       common/ddd/ff,aic
       common/range/rmin,rmax
 cc      common / sizes / tx,ty
 cc      dimension x(15000),y(15000)
-      dimension x(n),y(n)
+cx      dimension x(n),y(n)
+      integer :: npoi, iskip
       common/events/npoi
       common/skip/iskip
+      real(8) :: PI, t1, XX, YY, R2
       DATA PI /3.14159265358979D0/
 c correlation lag band (Palm intensity)
       rmin=0.0d0
@@ -167,19 +180,25 @@ c
 c
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, fr
-      real*8     xinit(n,itmax1), dist, eps, fr(itmax1)
+      integer :: n, nn, itmax, itmax1, iter, ipmax, nip, ipri(ipmax),
+     1           ipflag
+      real(8) :: xinit(n,itmax1), rr(nn), dist, eps, fr(itmax1),
+     1           eps1(itmax1),fn(ipmax), mples(ipmax,n)
+cx      real*8     xinit(n,itmax1), dist, eps, fr(itmax1)
 c
-      integer    iter, xh, xs, xl, x0, xr, xe, xc, j
+cx      integer    iter, xh, xs, xl, x0, xr, xe, xc, j
 cc      real*8     f(maxh5), x(maxh5,maxh)
 cc      real*8     epslon
 cc      real*8     eps1, alpha, beta, gamma
-      real*8     f(n+5), x(n+5,n)
-      real*8     epsln
-      real*8     eps1(itmax1), alpha, beta, gamma
+cx      real*8     f(n+5), x(n+5,n)
+cx      real*8     epsln
+cx      real*8     eps1(itmax1), alpha, beta, gamma
+      integer :: xh, xs, xl, x0, xr, xe, xc, j
+      real(8) :: f(n+5), x(n+5,n), epsln, alpha, beta, gamma
 c
-      real*8     rr(nn)
-      real*8     fn(ipmax), mples(ipmax,n)
-      integer    ipri(ipmax)
+cx      real*8     rr(nn)
+cx      real*8     fn(ipmax), mples(ipmax,n)
+cx      integer    ipri(ipmax)
 c
       data       alpha/-1.0d0/, beta/0.5d0/, gamma/2.0d0/
 c
@@ -187,6 +206,8 @@ c
       xr = n + 3
       xe = n + 4
       xc = n + 5
+
+      x(1:(n+5),1:n) = 0
 c
 cc      call first(n, f, x, funct, xinit, dist)
       call first(n, f, x, rr, nn, funct, xinit, dist,
@@ -206,7 +227,7 @@ c
 cc      eps1 = epslon(n, f)
 cc      write(6,31) iter, f(xl), eps1,(x(xl,i), i=1, n)
 cc   31 format(i5, f15.3, 6d12.4)
-   31 format(i5, f15.3, 6e12.4)
+cx   31 format(i5, f15.3, 6e12.4)
       eps1(it1) = epsln(n, f)
       fr(it1) = f(xl)
       do 10 j = 1, n
@@ -233,10 +254,15 @@ cc          call newsim(n, f, x, funct, x0, xr, gamma, xe)
         call newsim(n, f, x, rr, nn, funct, x0, xr, gamma, xe,
      &                ipmax, nip, ipri, fn, mples, ipflag)
 c
+
           if(f(xe) .lt. f(xr)) then
+
             call update(n, f, x, xe, xh)
+
           else
+
             call update(n, f, x, xr, xh)
+
             end if
 c
         else
@@ -292,10 +318,12 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       integer    n, xh, xs, xl
 cc      real*8     f(maxh5)
-      real*8     f(n+5)
+cx      real*8     f(n+5)
+      real(8) :: f(n+5)
 c
       integer    i
-      real*8     fmin1, fmax1, fmax2
+cx      real*8     fmin1, fmax1, fmax2
+      real(8) :: fmin1, fmax1, fmax2
 c
       if(f(1) .gt. f(2)) then
         fmax1 = f(1)
@@ -345,15 +373,18 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       external   funct
 c
-      integer    n
+cx      integer    n
 cc      real*8     f(maxh5), x(maxh5,maxh), xinit(maxh), xx(maxh), dist
-      real*8     f(n+5), x(n+5,n), xinit(n), xx(n), dist
+cx      real*8     f(n+5), x(n+5,n), xinit(n), xx(n), dist
+      integer :: n, nn,  ipmax, nip, ipri(ipmax), ipflag
+      real(8) :: f(n+5), x(n+5,n),  rr(nn), xinit(n), dist, fn(ipmax),
+     1           mples(ipmax,n), xx(n)
 c
       integer    i, j
 c
-      real*8     rr(nn)
-      real*8     fn(ipmax), mples(ipmax,n)
-      integer    ipri(ipmax)
+cx      real*8     rr(nn)
+cx      real*8     fn(ipmax), mples(ipmax,n)
+cx      integer    ipri(ipmax)
 c
       do 10 i = 1, n + 1
 c
@@ -383,7 +414,8 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       integer    n, xh, x0
 cc      real*8     x(maxh5,maxh)
-      real*8     x(n+5,n)
+cx      real*8     x(n+5,n)
+      real(8) :: x(n+5,n)
 c
       integer    i, j
 c
@@ -400,16 +432,19 @@ c
 c -------------------------------------------------------------------- c
 c -------------------------------------------------------------------- c
 cc      function   epslon(n, f)
-      real*8 function   epsln(n, f)
+cx      real*8 function   epsln(n, f)
+      double precision function epsln(n, f)
 c
 cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       integer    n
 cc      real*8     f(maxh5)
-      real*8     f(n+5)
+cx      real*8     f(n+5)
+      real(8) :: f(n+5)
 c
       integer    i
-      real*8     epslon, emean
+cx      real*8     epslon, emean
+      real(8) :: epslon, emean
 c
       emean = 0.0d0
       do 10 i = 1, n+1
@@ -428,6 +463,7 @@ c
       end
 c -------------------------------------------------------------------- c
 c -------------------------------------------------------------------- c
+cd  call newsim(n, f, x, rr, nn, funct, x0, xh, alpha, xr,ipmax, nip, ipri, fn, mples, ipflag)
 cc      subroutine newsim(n, f, x, funct, x0, in, prm, out)
       subroutine newsim(n, f, x, rr, nn, funct, x0, in, prm, out,
      &                        ipmax, nip, ipri, fn, mples, ipflag)
@@ -436,15 +472,18 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       external   funct
 c
-      integer    n, x0, in, out
+cx      integer    n, x0, in, out
 cc      real*8     f(maxh5), x(maxh5,maxh), xx(maxh), prm
-      real*8     f(n+5), x(n+5,n), xx(n), prm
+cx      real*8     f(n+5), x(n+5,n), xx(n), prm
+      integer :: n, nn, x0, in, out, ipmax, nip, ipri(ipmax), ipflag
+      real(8) :: f(n+5), x(n+5,n), rr(nn), prm, fn(ipmax),
+     1           mples(ipmax,n), xx(n)
 c
       integer    j
 c
-      real*8     rr(nn)
-      real*8     fn(ipmax), mples(ipmax,n)
-      integer    ipri(ipmax)
+cx      real*8     rr(nn)
+cx      real*8     fn(ipmax), mples(ipmax,n)
+cx      integer    ipri(ipmax)
 c
       do 10 j = 1, n
         x(out,j) = prm * x(in,j) + (1.0 - prm) * x(x0,j)
@@ -464,7 +503,8 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       integer    n, in, out
 cc      real*8     f(maxh5), x(maxh5,maxh)
-      real*8     f(n+5), x(n+5,n)
+cx      real*8     f(n+5), x(n+5,n)
+      real(8) :: f(n+5), x(n+5,n)
 c
       integer    j
 c
@@ -486,15 +526,18 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       external   funct
 c
-      integer    n, xl
+cx      integer    n, xl
 cc      real*8     f(maxh5), x(maxh5,maxh), xx(maxh)
-      real*8     f(n+5), x(n+5,n), xx(n)
+cx      real*8     f(n+5), x(n+5,n), xx(n)
+      integer :: n, nn, xl, ipmax, nip, ipri(ipmax), ipflag
+      real(8) :: f(n+5), x(n+5,n), rr(nn), fn(ipmax), mples(ipmax,n)
 c
       integer    i, j
 c
-      real*8     rr(nn)
-      real*8     fn(ipmax), mples(ipmax,n)
-      integer    ipri(ipmax)
+cx      real*8     rr(nn)
+cx      real*8     fn(ipmax), mples(ipmax,n)
+cx      integer    ipri(ipmax)
+      real(8) :: xx(n)
 c
       do 10 i = 1, n+1
         if(i .ne. xl) then
@@ -514,57 +557,32 @@ c
 
 cc      SUBROUTINE quad2d(x1,x2,ss)
       SUBROUTINE quad2d(func,x1,x2,ss)
-      implicit real*8(a-h,o-z)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: x1, x2, ss, r0
       common/distance/r0
 c      REAL ss,x1,x2,h
-      EXTERNAL h
+cx      EXTERNAL h
+      real(8), EXTERNAL :: h
 CU    USES h,qgausx
 cc      call qgausx(h,x1,x2,ss)
-      EXTERNAL func
+cx      EXTERNAL func
+      real(8), EXTERNAL :: func
       call qgausx(func,h,x1,x2,ss)
-      return
-      END
-
-cc      real*8 FUNCTION f(yy)
-      real*8 FUNCTION f(func,yy)
-      implicit real*8(a-h,o-z)
-      common/distance/r0
-c      REAL f,yy,func,x,y,z
-      COMMON /xyz/ x,y,z
-CU    USES func
-      y=yy
-      f=func(x,y)
-      return
-      END
-
-cc      real*8 FUNCTION h(xx)
-      real*8 FUNCTION h(func,xx)
-      implicit real*8(a-h,o-z)
-      common/distance/r0
-      common/case/kk 
-c      REAL h,xx,func,y1,y2,x,y,z
-      EXTERNAL func
-      COMMON /xyz/ x,y,z
-CU    USES g,qgausy,y1,y2
-c      REAL ss
-      x=xx
-      if (kk.eq.1) call qgausy(func,y1(x),y2(x),ss)
-      if (kk.eq.2) call qgausy(func,y3(x),y2(x),ss)
-      if (kk.eq.3) call qgausy(func,y1(x),y3(x),ss)
-c      write(6,*) kk, ss,y1(x),y2(x),y3(x)
-      h=ss
       return
       END
 
 cc      SUBROUTINE qgausx(func,a,b,ss)
       SUBROUTINE qgausx(func,h,a,b,ss)
-      implicit real*8(a-h,o-z)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: a, b, ss, r0
       common/distance/r0
 c      REAL a,b,ss,func
-      EXTERNAL func
+cx      EXTERNAL func
+      real(8), EXTERNAL :: func, h
       INTEGER j
 c      REAL dx,xm,xr,w(5),x(5)
-      dimension w(5), x(5)
+cx      dimension w(5), x(5)
+      real(8) :: w(5), x(5), xm, xr, dx
       SAVE w,x
       DATA w/.2955242247d0,.2692667193d0,.2190863625d0,.1494513491d0,
      *.0666713443d0/
@@ -583,13 +601,16 @@ cc        ss=ss+w(j)*(func(xm+dx)+func(xm-dx))
       END
 
       SUBROUTINE qgausy(func,a,b,ss)
-      implicit real*8(a-h,o-z)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: a, b, ss, r0
       common/distance/r0
 c      REAL a,b,ss,func
-      EXTERNAL func
+cx      EXTERNAL func
+      real(8), EXTERNAL :: func
       INTEGER j
 c      REAL dx,xm,xr,w(5),x(5)
-      dimension w(5), x(5)
+cx      dimension w(5), x(5)
+      real(8) :: f, w(5), x(5), xm, xr, dx
       SAVE w,x
       DATA w/.2955242247d0,.2692667193d0,.2190863625d0,.1494513491d0,
      *.0666713443d0/
@@ -607,29 +628,70 @@ cc        ss=ss+w(j)*(f(xm+dx)+f(xm-dx))
       return
       END
 
-      real*8 FUNCTION y1(x)
-      implicit real*8(a-h,o-z)
+cc      real*8 FUNCTION f(yy)
+cx      real*8 FUNCTION f(func,yy)
+      double precision FUNCTION f(func,yy)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: yy, r0, x, y, z, func
+      common/distance/r0
+c      REAL f,yy,func,x,y,z
+      COMMON /xyz/ x,y,z
+CU    USES func
+      y=yy
+      f=func(x,y)
+      return
+      END
+
+cc      real*8 FUNCTION h(xx)
+cx      real*8 FUNCTION h(func,xx)
+      double precision FUNCTION h(func,xx)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: xx, r0, x, y, z, ss
+      integer :: kk
+      common/distance/r0
+      common/case/kk 
+c      REAL h,xx,func,y1,y2,x,y,z
+cx      EXTERNAL func
+      real(8), EXTERNAL :: func
+      COMMON /xyz/ x,y,z
+CU    USES g,qgausy,y1,y2
+      real(8) :: y1, y2, y3
+c      REAL ss
+      x=xx
+      if (kk.eq.1) call qgausy(func,y1(x),y2(x),ss)
+      if (kk.eq.2) call qgausy(func,y3(x),y2(x),ss)
+      if (kk.eq.3) call qgausy(func,y1(x),y3(x),ss)
+c      write(6,*) kk, ss,y1(x),y2(x),y3(x)
+      h=ss
+      return
+      END
+
+cx      real*8 FUNCTION y1(x)
+      double precision FUNCTION y1(x)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: x, r0
       common/distance/r0
 c      REAL x,y
       y1=x
       return
       END
 
-      real*8 FUNCTION y2(x)
-      implicit real*8(a-h,o-z)
+cx      real*8 FUNCTION y2(x)
+      double precision FUNCTION y2(x)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: x, r0
       common/distance/r0
 c      REAL x,y
       y2=x+r0
       return
       END
 
-      real*8 FUNCTION y3(x)
-      implicit real*8(a-h,o-z)
+cx      real*8 FUNCTION y3(x)
+      double precision FUNCTION y3(x)
+cx      implicit real*8(a-h,o-z)
+      real(8) :: x, r0
       common/distance/r0
 c      REAL x,y
       y3=-x+r0
       return
       END
-
-
-

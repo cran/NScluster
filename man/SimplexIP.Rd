@@ -5,12 +5,12 @@
   Parameter estimation of the inverse-power type via numerical calculation of the Ripley's K-function.
 }
 \usage{
-  SimplexIP(offspring, pa, Ty=1, x2, skip=1, eps=0.1e-2, process=0, plot=TRUE)
+  SimplexIP(offspring, pa, ty=1, x2, skip=1, eps=0.1e-2, process=0, plot=TRUE)
 }
 \arguments{
   \item{offspring}{the list of coordinates \eqn{(x,y)} of offspring points.}
   \item{pa}{the initial guesses of the parameters \eqn{(\mu, \nu, p, c)}{(mu, nu, p, c)}.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]}
             without loss of generality except for the scaling.}
   \item{x2}{upper limit value in place of \eqn{\infty}{infty} in the integral in distribution function below.}
   \item{skip}{the variable for the fast likelihood but rough approximation of the initial estimates.
@@ -29,9 +29,9 @@
   \item{plot}{plot the process of optimizing by the simplex with the normalized parameters depending on \code{pa}.}
 }
 \value{
-  \item{logL.p}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
-  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logL.p}.}
-  \item{logL.s}{the minimized -log L by the simplex method.}
+  \item{logl.palm}{the minimized -log L in the process of minimizing the negative Palm log-likelihood function.}
+  \item{mple}{the MPLE (maximum Palm likelihood estimator) values corresponding to the above \code{logl.palm}.}
+  \item{logl.simplex}{the minimized -log L by the simplex method.}
   \item{stderr}{the standard deviations among function values of the vertices \eqn{x(i)} of the simplex.}
   \item{pa.normal}{the values of the corresponding normalized parameters \eqn{x(i)}.
                        the last values show the normalized variables corresponding to the MPLE (the maximum Palm likelihood estimator) values relative to the initial estimates.}
@@ -48,12 +48,13 @@
   ## simulation
   seeds <- c(822, 913, 905)
   mu <- 50;  nu <- 30;  p <- 1.5;  c <- 0.005
-  z <- SimulateIP( seeds, c(mu,nu,p,c) )
+  z <- SimulateIP(seeds, c(mu,nu,p,c))
 
   \dontrun{
     ## estimation
     ## need very long c.p.u time in the minimization procedure
-    SimplexIP( z$offspring, c(mu,nu,p,c), x2=0.3, skip=100, process=3 )
+    setOmpNumThreads(2)
+    SimplexIP(z$offspring, c(mu,nu,p,c), x2=0.3, skip=100, process=3)
   }
 }
 

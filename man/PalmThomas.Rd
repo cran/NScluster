@@ -4,13 +4,13 @@
 \description{
   Calculate the non-parametric Palm intensity function of the Thomas model estimated directly from a set of point pattern data.}
 \usage{
-  PalmThomas(offspring, pa, delta, Ty, plot=TRUE)
+  PalmThomas(offspring, pa, delta, ty, plot=TRUE)
 }
 \arguments{
   \item{offspring}{the list of coordinates \eqn{(x,y)} of offspring points.}
   \item{pa}{the parameters \eqn{(\mu_i, \nu_i, \sigma_i)}{(mu_i, nu_i, sigma_i)}, \eqn{i=1,2,...,I \le 8}{i=1,2,...,I <= 8}.}
   \item{delta}{a width for the non-parametric Palm intensity function.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
   \item{plot}{logical. If TRUE (default) the non-parametric estimate and the curves of the true and MPLE (the maximum Palm likelihood estimator) parameters are shown.}
 }
 \value{
@@ -30,14 +30,14 @@
   ## simulation
   seeds <- c(822, 913, 905)
   pa1 <- c(50, 30, 0.03)
-  Ty <- 1
-  z <- SimulateThomas( seeds, pa1, Ty )
+  ty <- 1
+  z <- SimulateThomas(seeds, pa1, ty)
 
   ## estimation
   delta <- 0.001
   pa2 <- c(0.51311e+02, 0.26104e+02, 0.29071e-01)
   pa <- matrix(c(pa1,pa2), 2, 3, byrow=TRUE) 
-  PalmThomas( z$offspring, pa, delta, Ty )
+  PalmThomas(z$offspring, pa, delta, ty)
 }
 
 \keyword{spatial}

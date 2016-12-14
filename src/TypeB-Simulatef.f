@@ -3,7 +3,7 @@
 c
       include 'NScluster_f.h'
 c
-      implicit real*8 (a-h, o-z)
+cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
 cc      dimension  x1(1000), y1(1000)
 cc      dimension  x2(1000), y2(1000)
@@ -11,13 +11,21 @@ cc      dimension  xcl1(1000,5000), ycl1(1000,5000)
 cc      dimension  xcl2(1000,5000), ycl2(1000,5000)
 cc      dimension xx1(15000),yy1(15000)
 cc      dimension xx2(15000),yy2(15000)
-      dimension  x1(mmax), y1(mmax)
-      dimension  x2(mmax), y2(mmax)
-      dimension  xcl1(mmax,nmax), ycl1(mmax,nmax)
-      dimension  xcl2(mmax,nmax), ycl2(mmax,nmax)
-      dimension xx1(mmax*nmax), yy1(mmax*nmax)
-      dimension xx2(mmax*nmax), yy2(mmax*nmax)
-      dimension ncl1(mmax), ncl2(nmax)
+cx      dimension  x1(mmax), y1(mmax)
+cx      dimension  x2(mmax), y2(mmax)
+cx      dimension  xcl1(mmax,nmax), ycl1(mmax,nmax)
+cx      dimension  xcl2(mmax,nmax), ycl2(mmax,nmax)
+cx      dimension xx1(mmax*nmax), yy1(mmax*nmax)
+cx      dimension xx2(mmax*nmax), yy2(mmax*nmax)
+cx      dimension ncl1(mmax), ncl2(nmax)
+      integer :: ix, iy, iz, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax),
+     1           ier
+      real(8) :: ty, amu1, amu2, anu1, s1, s2, x1(mmax), y1(mmax),
+     1           xx1(mmax*nmax), yy1(mmax*nmax), x2(mmax), y2(mmax),
+     2           xx2(mmax*nmax), yy2(mmax*nmax)
+      real(8) :: xcl1(mmax,nmax), ycl1(mmax,nmax), xcl2(mmax,nmax),
+     1           ycl2(mmax,nmax), pi, r1, r2, theta1, theta2, random,
+     2           xcl1ij , ycl1ij , xcl2ij , ycl2ij 
 c
       pi=3.14159265358979d0
 c
@@ -66,10 +74,11 @@ cc        do 45 j=1, ncl1
           theta1=2*pi*(random(ix,iy,iz))
           np1=np1+1
           np=np+1
-          xcl1(i,j)=x1(i)+r1*cos(theta1)*s1    
-	  ycl1(i,j)=y1(i)+r1*sin(theta1)*s1
+          xcl1(i,j)=x1(i)+r1*cos(theta1)*s1
+          ycl1(i,j)=y1(i)+r1*sin(theta1)*s1
           jx1=INT(xcl1(i,j))  
-          jy1=ycl1(i,j)/ty
+cx          jy1=ycl1(i,j)/ty
+          jy1=int(ycl1(i,j)/ty)
 c
           if (xcl1(i,j).le.0) then
              xcl1(i,j)=xcl1(i,j)+(1-jx1)
@@ -123,14 +132,15 @@ c---
 c---
 cc          do 55 j=1, ncl2
           do 55 j=1, ncl2(i)
- 	    r2=sqrt(-2*log(random(ix,iy,iz)))
-	    theta2=2*pi*(random(ix,iy,iz))
-            np2=np2+1	
-            np=np+1	
-	    xcl2(i,j)=x2(i)+r2*cos(theta2)*s2     
-	    ycl2(i,j)=y2(i)+r2*sin(theta2)*s2
+            r2=sqrt(-2*log(random(ix,iy,iz)))
+            theta2=2*pi*(random(ix,iy,iz))
+            np2=np2+1
+            np=np+1
+            xcl2(i,j)=x2(i)+r2*cos(theta2)*s2     
+            ycl2(i,j)=y2(i)+r2*sin(theta2)*s2
             jx2=int(xcl2(i,j))  
-            jy2=ycl2(i,j)/ty
+cx            jy2=ycl2(i,j)/ty
+            jy2=int(ycl2(i,j)/ty)
                if (xcl2(i,j).le.0) then
                xcl2(i,j)=xcl2(i,j)+(1-jx2)
                end if
@@ -157,6 +167,6 @@ cc        close(11)
 cc        close(12)
 c
 cc      stop
-        return
+      return
 c
-	end
+      end

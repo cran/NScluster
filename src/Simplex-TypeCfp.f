@@ -26,23 +26,32 @@ c
 cc      parameter   (maxh=6, maxh5=maxh+5)
       parameter   (n=5)
 c
-      implicit real * 8 (a-h,o-z)
+cx      implicit real * 8 (a-h,o-z)
+      integer :: np, itmax, itmax1, ipmax, iter, nip,  ipri(ipmax),
+     1           ipflag
+      real(8) :: x(np), y(np), ty1, amu1, amu2, anu1, anu2, scls11,
+     1           scls22, eps, fn(ipmax), mples(ipmax,n),
+     2           xinit(n,itmax1), eps1(itmax1), f(itmax1)
+      real(8) :: scllam, scla, sclnu1, sclnu2, scls1, scls2, fmin,
+     1           tx, ty 
       common/paramscl/scllam,scla,sclnu1,sclnu2,scls1,scls2
       common /fnmin/ fmin
       common / sizes / tx,ty
 cc      common /fname/filea
 cc      character*50 filea
-      real*8 scllam,scla,sclnu1,sclnu2,scls1,scls2
+cx      real*8 scllam,scla,sclnu1,sclnu2,scls1,scls2
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
-      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
-      external   cfunct
+cx      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
+      external   cfunctMP
 c
+      integer :: iskip
       common /skip/iskip
-      dimension  x(np), y(np), rr(np**2)
-      dimension  eps1(itmax1)
-      dimension  ipri(ipmax), fn(ipmax), mples(ipmax,n)
+cx      dimension  x(np), y(np), rr(np**2)
+cx      dimension  eps1(itmax1)
+cx      dimension  ipri(ipmax), fn(ipmax), mples(ipmax,n)
+      real(8) :: dist, rr(np**2)
 c
       fmin=1.d10
 ***************************
@@ -70,7 +79,7 @@ c
 cc      open(8, FILE='TypeC.simplex.print')
 cc      write(8,2) '            -log L            lambda      nu1',
 cc     &'         a           s1          s2'
-    2 format(2a)
+cx    2 format(2a)
 
 cc      xinit(1) = 1.0d0
 cc      xinit(2) = 1.0d0
@@ -88,7 +97,7 @@ cc      eps = 1.0d-3
 c
 cc      call simplx(xinit, n, funct, dist, eps, f)
       nip = 1
-      call simplx(xinit, n, rr, nn, cfunct, dist, eps, f,
+      call simplx(xinit, n, rr, nn, cfunctMP, dist, eps, f,
      & itmax, itmax1, iter, eps1, ipmax, nip, ipri, fn, mples, ipflag)
       if( (ipflag.eq.1) .or. (ipflag.eq.3) ) nip = nip-1
 c
@@ -98,26 +107,35 @@ cc      stop
       end
 c -------------------------------------------------------------------- c
 cc      subroutine funct(n,b,fn)
-      subroutine cfunct(n,b,fn,rr,nn,nip,jpri,ffn,mples,
+      subroutine cfunctMP(n,b,fn,rr,nn,nip,jpri,ffn,mples,
      &                       ipmax,ipflag)
 c-----------------------------------------------------------------------
 c     likelihood function of the inverse power poisson process
 c-----------------------------------------------------------------------
-      implicit real * 8 (a-h,o-z)
+cx      implicit real * 8 (a-h,o-z)
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
-      dimension rr(nn)
+      integer :: n, nn, nip, ipmax, jpri(ipmax), ipflag
+      real(8) :: b(n), fn, rr(nn), ffn(ipmax), mples(ipmax,n)
+      integer :: np
+      real(8) :: ff, aic, rmin, rmax, scllam, scla, sclnu1, sclnu2,
+     1           scls1, scls2, fmin
+cx      dimension rr(nn)
       common/ddd/ff,aic
       common/range/rmin,rmax
       common/paramscl/scllam,scla,sclnu1,sclnu2,scls1,scls2
       common/events/np
       common /fnmin/ fmin
+      real(8) :: pi, eps, alam, a, a1, a2, anu1, anu2, s1, s2, se, f1,
+     1           s124, s224, exp1rmax, exp2rmax, exp1i, exp2i,
+     2           ramdai, fs1, ainteg1, ainteg2
       data pi/3.14159265358979d0/
 cc      dimension b(6),g(6),h(6)
-      dimension b(n),g(n),h(n)
+cx      dimension b(n),g(n),h(n)
+cx      dimension b(n)
 c
-      real*8   ffn(ipmax), mples(ipmax,n)
-      integer  jpri(ipmax)
+cx      real*8   ffn(ipmax), mples(ipmax,n)
+cx      integer  jpri(ipmax)
 c
       pi=3.14159265358979d0
       eps=0.1d-5
@@ -137,6 +155,8 @@ c-----
       a1=(a)*(1/(s1**2))*(anu1/(4*pi))
       a2= (1-a)*(1/(s2**2))*(anu2/(4*pi))
 c-----
+      ier=0
+!$omp parallel do private(exp1i,exp2i,ramdai) reduction(+:f1)
       do 30 i=1,nn
 cc      if(rr(i).le.rmin.or.rr(i).ge.rmax) go to 30
 cc      exp1i = exp(-((rr(i))**2)/(4*((s1)**2)))
@@ -149,10 +169,18 @@ cc     &         (1-a)*(1/((s2)**2))*(anu2/(4*pi))*
 cc     &         exp2i       
       exp1i = exp(-((rr(i))**2)/s124)
       exp2i = exp(-((rr(i))**2)/s224)
-      ramdai = (alam) + a1*exp1i+ a2*exp2i       
-      if(ramdai.le.0.0) go to 190
-      f1=f1+log(ramdai)
+      ramdai = (alam) + a1*exp1i+ a2*exp2i
+cc      if(ramdai.le.0.0) go to 190
+cc      f1=f1+log(ramdai)
+      if(ramdai.le.0.0) then
+         ier=-1
+      else
+         f1=f1+log(ramdai)
+      end if
    30 continue
+!$omp end parallel do
+      if(ier.eq.-1) go to 190
+c
        fs1 = pi*(rmax**2)*(alam)
 cc      ainteg1 = 2*pi*(a)*
 cc     &          (1/((s1)**2))*(anu1/(4*pi))*exp1rmax
@@ -185,9 +213,9 @@ cc      close(8)
       nip = nip+1
       return
 cc      write(6,*) 'h(6)=', h(6)
-    3 format(1h ,110x,d18.10)
-    2 format(1h , a, d18.10,6d12.5)
-    1 format(1h ,7d18.10)
+cx    3 format(1h ,110x,d18.10)
+cx    2 format(1h , a, d18.10,6d12.5)
+cx    1 format(1h ,7d18.10)
 c
   190 continue
       fn=1.0d30

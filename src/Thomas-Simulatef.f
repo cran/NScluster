@@ -3,13 +3,17 @@
 c
       include 'NScluster_f.h'
 c
-       implicit real*8 (a-h, o-z)
+cx       implicit real*8 (a-h, o-z)
 cc       common ix,iy,iz
 cc       dimension  x(100), y(100)
 cc       dimension  xcl(100,5000), ycl(100,5000)
-       dimension  x(mmax), y(mmax)
-       dimension  xcl(mmax,nmax), ycl(mmax,nmax)
-       dimension  ncl(mmax)
+cx       dimension  x(mmax), y(mmax)
+cx       dimension  xcl(mmax,nmax), ycl(mmax,nmax)
+cx       dimension  ncl(mmax)
+      integer :: ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
+      real(8) :: ty, amu, anu, sig, x(mmax), y(mmax), xcl(mmax,nmax),
+     1           ycl(mmax,nmax)
+      real(8) :: pi, r, theta, xclij, yclij, random
 c
        pi=3.14159265358979d0
 c
@@ -51,13 +55,14 @@ c---
 c---
 cc          do 35 j=1, ncl
           do 35 j=1, ncl(i)
- 	    r=sqrt(-2*log(random(ix,iy,iz)))
-	    theta=2*pi*(random(ix,iy,iz))	
+            r=sqrt(-2*log(random(ix,iy,iz)))
+            theta=2*pi*(random(ix,iy,iz))
             np=np+1
-	    xclij=x(i)+r*cos(theta)*sig     
-	    yclij=y(i)+r*sin(theta)*sig
+            xclij=x(i)+r*cos(theta)*sig     
+            yclij=y(i)+r*sin(theta)*sig
             jx=INT(xclij)  
-            jy=yclij/ty
+cx            jy=yclij/ty
+            jy=int(yclij/ty)
                if (xclij.le.0) then
                  xclij=xclij+(1-jx)
                end if
@@ -75,7 +80,7 @@ c
               ycl(i,j)=yclij
 cc           write(10,*) xcl(i,j), ycl(i,j)
  35       continue
- 11	format(' ',2F10.6)
+cx 11	format(' ',2F10.6)
  25     continue
 cc        write(6,*) '#(total offspring)=', np
 c
@@ -84,6 +89,6 @@ cc        close(11)
 cc        close(12)
 c
 cc        stop
-        return
+      return
 c
-        end
+      end

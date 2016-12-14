@@ -2,15 +2,21 @@
 c
       include 'NScluster_f.h'
 c
-       implicit real*8(a-h,o-z)
+cx       implicit real*8(a-h,o-z)
 cc       dimension  x(2000),y(2000), RR(4000000)
 cc       dimension  nc(1000),palm(1000),palm1(1000,10)
 cc       common/events/np
+       integer :: np, m, jmax
+       real(8) :: x(np), y(np), delta, ty1, amu(m), anu(m), v(m) ,
+     1            palm(jmax), palm1(jmax,m)
+       real(8) :: tx, ty
        common / sizes / tx,ty
 cc       character*50 fname
-       dimension  x(np),y(np), RR(np*np)
-       dimension  amu(m),anu(m),v(m)
-       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
+cx       dimension  x(np),y(np), RR(np*np)
+cx       dimension  amu(m),anu(m),v(m)
+cx       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
+       integer :: nc(jmax)
+       real(8) :: RR(np*np), pi, t, r, ae
 cc       open(2,file='Thomasparam.palm')
 cc       read(2,2) fname
 cc  2    format(a)
@@ -39,7 +45,8 @@ cc       do 15 k=1,1000
  15    continue  
 c
        do 25 i=1, NN
-          id=RR(i)/delta+1
+cx          id=RR(i)/delta+1
+          id=int(RR(i)/delta)+1
 cc          nc(id)=nc(id)+1
           if(id.le.jmax) nc(id)=nc(id)+1
  25    continue       
@@ -85,11 +92,15 @@ cc       stop
 cc        subroutine bdry(RR,NN,x,y)
         subroutine bdry(RR,NN,x,y,np)
 c
-        implicit real*8(a-h,o-z)
+cx        implicit real*8(a-h,o-z)
+        integer :: NN, np
+        real(8) :: RR(np*np), x(np), y(np)
+        real(8) :: tx, ty
 cc        common/events/np
         common / sizes / tx,ty
 cc        dimension  x(2000), y(2000), RR(4000000)
-        dimension  x(np), y(np), RR(np*np)
+cx        dimension  x(np), y(np), RR(np*np)
+        real(8) :: t1, XX, YY, R2
         t1=0.5d0
 c periodic boundary
         N = np

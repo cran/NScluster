@@ -4,7 +4,7 @@
 
 extern void F77_NAME(simaf)(int*, int*, int*, double*, double*, double*, double*, double*, double*, int*, int*, double*, double*, double*, double*, int*, int*, int*);
 
-SEXP simA(SEXP ix, SEXP iy, SEXP iz, SEXP Ty, SEXP amu, SEXP anu, SEXP a, SEXP sig1, SEXP sig2, SEXP pmax, SEXP omax)
+SEXP simA(SEXP ix, SEXP iy, SEXP iz, SEXP ty, SEXP amu, SEXP anu, SEXP a, SEXP sig1, SEXP sig2, SEXP pmax, SEXP omax)
 {
     double *d1,*d2,*d3,*d4,*d5,*d6,*d7,*d8,*d9,*d10;
     int *i1,*i2,*i3,*i4,*i5,*i6,*i7,*i8;
@@ -19,7 +19,7 @@ SEXP simA(SEXP ix, SEXP iy, SEXP iz, SEXP Ty, SEXP amu, SEXP anu, SEXP a, SEXP s
     i1 = INTEGER_POINTER(ix);
     i2 = INTEGER_POINTER(iy);
     i3 = INTEGER_POINTER(iz);
-    d1 = NUMERIC_POINTER(Ty);
+    d1 = NUMERIC_POINTER(ty);
     d2 = NUMERIC_POINTER(amu);
     d3 = NUMERIC_POINTER(anu);
     d4 = NUMERIC_POINTER(a);

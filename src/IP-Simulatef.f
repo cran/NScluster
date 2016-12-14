@@ -3,13 +3,17 @@
 c
       include 'NScluster_f.h'
 c
-      implicit real*8 (a-h, o-z)
+cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
 cc      dimension  x(100), y(100)
 cc      dimension  xcl(100,5000), ycl(100,5000)
-      dimension  x(mmax), y(mmax)
-      dimension  xcl(mmax,nmax), ycl(mmax,nmax)
-      dimension  ncl(mmax)
+cx      dimension  x(mmax), y(mmax)
+cx      dimension  xcl(mmax,nmax), ycl(mmax,nmax)
+cx      dimension  ncl(mmax)
+      integer :: ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
+      real(8) :: ty, amu, anu, p, c, x(mmax), y(mmax), xcl(mmax,nmax),
+     1           ycl(mmax,nmax)
+      real(8) :: pi, ak, r, theta, xclij, yclij, random
 c
         pi = 3.14159265358979d0
 c
@@ -20,7 +24,6 @@ cc       open(12,file='IP.param')
 cc       read(12,*) ix,iy,iz
 cc       read(12,*) ty
 cc       read(12,*) amu,anu,p,c
-
 c
       amu=amu*ty
 cc      call Pois(amu,npts)
@@ -55,12 +58,13 @@ c---
 cc        do 35 j = 1, ncl
         do 35 j = 1, ncl(i)
           r=((random(ix,iy,iz)*(1-p)/ak)+c**(1-p))**(1/(1-p))-c
-          theta=2*pi*(random(ix,iy,iz))	
+          theta=2*pi*(random(ix,iy,iz))
           np=np+1
-	  xclij=x(i)+r*cos(theta)     
-	  yclij=y(i)+r*sin(theta)
+          xclij=x(i)+r*cos(theta)     
+          yclij=y(i)+r*sin(theta)
           jx=INT(xclij)  
-          jy=yclij/ty
+cx          jy=yclij/ty
+          jy=int(yclij/ty)
                if (xclij.le.0) then
                  xclij=xclij+(1-jx)
                end if
@@ -78,7 +82,7 @@ c
               ycl(i,j)=yclij
 cc           write(10,*) xcl(i,j), ycl(i,j)
  35       continue
- 11	format(' ',2F10.6)
+cx 11	format(' ',2F10.6)
  25     continue
 cc        write(6,*) '#(total offspring)=', np
 c
@@ -87,6 +91,6 @@ cc        close(11)
 cc        close(12)
 c
 cc        stop
-        return
+      return
 c
-	end
+      end

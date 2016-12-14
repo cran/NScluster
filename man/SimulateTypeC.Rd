@@ -5,13 +5,13 @@
   Simulation of the Generalized Thomas Model of Type C.
 }
 \usage{
-  SimulateTypeC(seeds, pa1, pa2, Ty=1, pmax=100, omax=3000, plot=TRUE)
+  SimulateTypeC(seeds, pa1, pa2, ty=1, pmax=100, omax=3000, plot=TRUE)
 }
 \arguments{
   \item{seeds}{the three positive integer variables, which are initial seeds for a sequence of uniform random numbers.}
   \item{pa1}{the parameter values \eqn{(\mu_1, \nu_1, \sigma_1)}{(mu_1, nu_1, sigma_1)} for the random variable Poisson.}
   \item{pa2}{the parameter values \eqn{(\mu_2, \nu_2, \sigma_2)}{(mu_2, nu_2, sigma_2)} for the random variable Poisson.}
-  \item{Ty}{the variable for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
+  \item{ty}{the variable \eqn{T_y}{Ty} for the standardized coordinates of points in the rectangular region \eqn{[0,1] \times [0,T_y]}{[0,1]*[0,Ty]} without loss of generality except for the scaling.}
   \item{pmax}{maximum number of parent points.}
   \item{omax}{maximum number of offspring points.}
   \item{plot}{logical. If TRUE (default) simulated parent points and offspring points are plotted.}
@@ -55,7 +55,7 @@
   seeds <- c(822, 913, 905)
   mu1 <- 5;  nu1 <- 30;  sig1 <- 0.01 
   mu2 <- 9;  nu2 <- 150;  sig2 <- 0.05
-  SimulateTypeC( seeds, c(mu1,nu1,sig1), c(mu2,nu2,sig2), pmax=200, omax=300 )
+  SimulateTypeC(seeds, c(mu1,nu1,sig1), c(mu2,nu2,sig2), pmax=200, omax=300)
 }
 
 \keyword{spatial}

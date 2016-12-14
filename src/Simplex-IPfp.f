@@ -23,10 +23,12 @@ c 3. change the define parameter and function.
 c
 c program starts. ------------------------------------------------------
 c
-      implicit real * 8 (a-h,o-z)
+cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
       parameter   (n=4)
 c
+      integer :: iskip
+      real(8) :: sclp, sclc, sclnu, sclmu, fmin, x2
       common/paramscl/sclp,sclc,sclnu,sclmu
       common /fnmin/ fmin
 cc      common / sizes / tx,ty
@@ -34,16 +36,22 @@ cc      common / sizes / tx,ty
 cc      common /fname/filea
       common/interval/x2
 cc      character*50 filea
-      real*8 sclp,sclc,sclnu,sclmu
+cx      real*8 sclp,sclc,sclnu,sclmu
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
-      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
-      external   ipfunct
+cx      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
+      integer :: np, iskip1, itmax, itmax1, ipmax, mples(ipmax,n), iter,
+     1           nip, ipri(ipmax), ipflag
+      real(8) :: x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1, x22,
+     1           eps, fn(ipmax),  xinit(n,itmax1),  eps1(itmax1),
+     2           f(itmax1)
+      real(8) :: dist, rr(np**2), tx
+      external   ipfunctMP
 c
-      dimension  x(np), y(np), rr(np**2)
-      dimension  eps1(itmax1)
-      dimension  ipri(ipmax), fn(ipmax), mples(ipmax,n)
+cx      dimension  x(np), y(np), rr(np**2)
+cx      dimension  eps1(itmax1)
+cx      dimension  ipri(ipmax), fn(ipmax), mples(ipmax,n)
 c
       fmin=1.d10
 ***************************
@@ -88,7 +96,7 @@ cc      eps = 1.0d-3
 c
 cc      call simplx(xinit, n, funct, dist, eps, f)
       nip = 1
-      call simplx(xinit, n, rr, nn, ipfunct, dist, eps, f,
+      call simplx(xinit, n, rr, nn, ipfunctMP, dist, eps, f,
      & itmax, itmax1, iter, eps1, ipmax, nip, ipri, fn, mples, ipflag)
       if( (ipflag.eq.1) .or. (ipflag.eq.3) ) nip = nip-1
 c
@@ -98,30 +106,37 @@ cc      stop
 c -------------------------------------------------------------------- 
 c
 cc      subroutine funct(n,b,fn)
-      subroutine ipfunct(n,b,fn,rr,nn,nip,jpri,ffn,mples,
+      subroutine ipfunctMP(n,b,fn,rr,nn,nip,jpri,ffn,mples,
      &                       ipmax,ipflag)
 c-----------------------------------------------------------------------
 c     likelihood function of the inverse power poisson process
 c-----------------------------------------------------------------------
-      implicit real * 8 (a-h,o-z)
+cx      implicit real * 8 (a-h,o-z)
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
-      dimension rr(nn)
+      integer :: n, nn, nip, ipmax, jpri(ipmax), ipflag
+      real(8) :: b(n), fn, rr(nn), ffn(ipmax), mples(ipmax,n)
+      integer :: np, iskip
+      real(8) :: ff, aic, rmin, rmax, sclp, sclc, sclnu, sclmu, ap, ac,
+     1           fmin
+cx      dimension rr(nn)
       common/ddd/ff,aic
       common/range/rmin,rmax
       common/paramscl/sclp,sclc,sclnu,sclmu
-cc      common/param/ap,ac
-      common/param/ap,ac,ak
+      common/param/ap,ac
       common/events/np
       common /fnmin/ fmin
       common /skip/iskip
+      real(8) :: pi, anu, amu, amuanu, anu2pi, f1, dFr, Frmax,
+     1           ramdai, aKrmax
 c
       data pi/3.14159265358979d0/
 cc      dimension b(4),g(4),h(4)
-      dimension b(n),g(n),h(n)
+cx      dimension b(n),g(n),h(n)
+cx      dimension b(n)
 c
-      real*8   ffn(ipmax), mples(ipmax,n)
-      integer  jpri(ipmax)
+cx      real*8   ffn(ipmax), mples(ipmax,n)
+cx      integer  jpri(ipmax)
 c
       pi=3.14159265358979d0
       ap=b(1)**2 *sclp
@@ -129,29 +144,38 @@ c
       anu=b(3)**2 *sclnu
       amu=b(4)**2 *sclmu
 c-----
-      ak=(ap-1)*(ac**(ap-1)) 
+cc      ak=(ap-1)*(ac**(ap-1)) 
       amuanu=amu*anu
       anu2pi=anu/2/pi
 c-----
 c
       f1=0.0
 cc      do 30 i=1,nn,iskip
+      ier=0
+!$omp parallel do private(dFr, ramdai) reduction(+:f1)
       do 30 i=1,nn
 c     if(mod(i,10000).eq.0) write(6,*) 'i=',i, '/',nn
 cc      if(rr(i).le.rmin.or.rr(i).ge.rmax) go to 30
 c
 cc      call power(rr(i),dFr,Frmax)
 cc      ramdai=(amu*anu)+anu/2/pi/rr(i)*dFr
-      call ippower(rr(i),dFr,Frmax)
+      call ippowerMP(rr(i),dFr,Frmax)
       ramdai=amuanu+anu2pi/rr(i)*dFr
 c
-      if(ramdai.le.0.0) go to 190
-      f1=f1+log(ramdai)
+cc      if(ramdai.le.0.0) go to 190
+cc      f1=f1+log(ramdai)
+      if(ramdai.le.0.0) then
+         ier=-1
+      else
+         f1=f1+log(ramdai)
+      end if
    30 continue
+!$omp end parallel do
+      if(ier.eq.-1) go to 190
 c
 cc      rmax=1.0d0/2
 cc      call power(rmax,dFr,Frmax)
-      call ippower(rmax,dFr,Frmax)
+      call ippowerMP(rmax,dFr,Frmax)
 c
 cc      aKrmax=pi*(rmax**2)+anu*Frmax/(amu*anu)
       aKrmax=pi*(rmax**2)+Frmax/amu
@@ -170,9 +194,9 @@ cc     & open(8,FILE='IP1000.simplex.print',position='APPEND')
 c     if(ipri.eq.0) write(8,2) 'testfn =',fn,ap,ac,amu,anu
 c     if(ipri.eq.1) write(8,2) 'update =',fn,ap,ac,amu,anu
 cc      close(8)
-    3 format(1h ,110x,d18.10)
-    1 format(1h ,7d18.10)
-    2 format(1h , a, d23.15,4d14.7)
+cx    3 format(1h ,110x,d18.10)
+cx    1 format(1h ,7d18.10)
+cx    2 format(1h , a, d23.15,4d14.7)
       ffn(nip) = fn
       mples(nip,1) = amu
       mples(nip,2) = anu
@@ -191,25 +215,42 @@ cc      write(6,2) 'fn190 =',fn,ap,ac,anu,amu
 c--------------------------------------------------------------------- c
 c--------------------------------------------------------------------- c
 cc      subroutine power(ri,dFr,Fr)
-      subroutine ippower(ri,dFr,Fr)
+      subroutine ippowerMP(ri,dFr,Fr)
 c
-      implicit real*8(a-h,o-z)
+cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
-      common/distance/r0
-      common/case/kk
-      common/param/ap,ac,ak
+cxx      common/distance/r0
+cxx      common/case/kk
+      real(8) :: ri, dFr, Fr
+      integer :: kk
+      real(8) :: r0, ap,ac, x2, x1, ss, tt, uu, Freps1, Freps2, 
+     1           xxm, xxr, xdx, xss, yy1, yy2, yy3, hMP1, hMP2
+      common/distancep/r0
+      common/casep/kk
+!$omp threadprivate(/distancep/)
+!$omp threadprivate(/casep/)
+      common/param/ap,ac
       common/interval/x2
-      INTEGER NVAL
+***************************************************************** 
+      common/param2/x1,ss,tt,uu,Freps1,Freps2
+!$omp threadprivate(/param2/)
+      common/param4/xxm,xxr,xdx,xss,yy1,yy2,yy3,hMP1,hMP2
+!$omp threadprivate(/param4/)
+***************************************************************** 
+c
+cx      INTEGER NVAL
+      integer :: NVAL
+      real(8) :: eps, pi, delta
 c      REAL X1,X2
 c      PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
-      INTEGER i
+cx      INTEGER i
 c      REAL dx,func,ss,x
 cc      EXTERNAL func
-      EXTERNAL ipfunc
+      EXTERNAL ipfuncMP
 c
       r0=ri
 c
-   10 continue
+cx   10 continue
 c      write(6,*) 'input r0'
 c      read(5,*) r0
 c     write(6,*) 'input x2'
@@ -225,17 +266,20 @@ c     r0=delta*j
       nval=100
         kk=1
 cc        call quad2d(X1,X2,ss)
-        call quad2d(ipfunc,X1,X2,ss)
+        call qgausxMP(ipfuncMP,X1,X2)
+        ss=xss
         kk=2
 cc        call quad2d(0.0d0,x1,tt)
-        call quad2d(ipfunc,0.0d0,x1,tt)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        tt=xss
         kk=3
 cc        call quad2d(0.0d0,x1,uu)
-        call quad2d(ipfunc,0.0d0,x1,uu)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        uu=xss
 c        write(6,*) 'r=', r0
 c        write(6,*) 'integral=', x1, x2, ss, tt, uu
 c        write(6,*) 'F(r)=', 2*(ss+tt+uu)
-11    continue
+cx11    continue
       Fr=2*(ss+tt+uu)
 c----------------------------------------------------------
       eps=0.001d0
@@ -245,13 +289,16 @@ c----------------------------------------------------------
       nval=100
         kk=1
 cc        call quad2d(X1,X2,ss)
-        call quad2d(ipfunc,X1,X2,ss)
+        call qgausxMP(ipfuncMP,X1,X2)
+        ss=xss
         kk=2
 cc        call quad2d(0.0d0,x1,tt)
-        call quad2d(ipfunc,0.0d0,x1,tt)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        tt=xss
         kk=3
 cc        call quad2d(0.0d0,x1,uu)
-        call quad2d(ipfunc,0.0d0,x1,uu)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        uu=xss
 c        write(6,*) 'r=', r0
 c        write(6,*) 'integral=', x1, x2, ss, tt, uu
 c        write(6,*) 'F(r)=', 2*(ss+tt+uu)
@@ -259,21 +306,26 @@ c        write(6,*) 'F(r)=', 2*(ss+tt+uu)
 c----------------------------------------------------------
 *     r0=delta*j-eps
       r0=ri-eps
+      if (r0.ne.0) then
       x1=r0/2
       nval=100
         kk=1
 cc        call quad2d(X1,X2,ss)
-        call quad2d(ipfunc,X1,X2,ss)
+        call qgausxMP(ipfuncMP,X1,X2)
+        ss=xss
         kk=2
 cc        call quad2d(0.0d0,x1,tt)
-        call quad2d(ipfunc,0.0d0,x1,tt)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        tt=xss
         kk=3
 cc        call quad2d(0.0d0,x1,uu)
-        call quad2d(ipfunc,0.0d0,x1,uu)
+        call qgausxMP(ipfuncMP,0.0d0,x1)
+        uu=xss
 c        write(6,*) 'r=', r0
 c        write(6,*) 'integral=', x1, x2, ss, tt, uu
 c        write(6,*) 'F(r)=', 2*(ss+tt+uu)
       Freps2=2*(ss+tt+uu)
+      end if
       if (r0.eq.0) then
       Freps2=0
       end if   
@@ -304,27 +356,48 @@ c     close(2)
 
 
 cc      real*8 FUNCTION func(x,y)
-      real*8 FUNCTION ipfunc(x,y)
-      implicit real*8(a-h,o-z)
-      common/distance/r0
-      common/case/kk
+cx      real*8 FUNCTION ipfuncMP(x,y)
+      DOUBLE PRECISION FUNCTION ipfuncMP(x,y)
+cx      implicit real*8(a-h,o-z)
+cxx      common/distance/r0
+cxx      common/case/kk
+cd      real(8) :: x, y
+      real(8) :: x, y
+      integer :: kk
+      real(8) :: r0, ap, ac, qx, qy
+      common/distancep/r0
+      common/casep/kk
+!$omp threadprivate(/distancep/)
+!$omp threadprivate(/casep/)
 c      common/param/p,c
-cc      common/param/ap,ac
-      common/param/ap,ac,ak
+      common/param/ap,ac
+      common/param3/qx,qy
+!$omp threadprivate(/param3/)
+c
 c      REAL x,y
+      real(8) :: pi, ak, xyr0
       pi=3.14159265358979d0
 c     p=1.5d0
 c     c=0.005d0
-cc      ak=(ap-1)*(ac**(ap-1)) 
+      ak=(ap-1)*(ac**(ap-1))
 cc      if (kk.le.2) func=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
-      if (kk.le.2) ipfunc=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
-     &     *(ak/(x+ac)**ap)
-     &     *(ak/(y+ac)**ap)
+cx      if (kk.le.2) ipfuncMP=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
+cx     &     *(ak/(x+ac)**ap)
+cx     &     *(ak/(y+ac)**ap)
+      if (kk.le.2) then
+         xyr0=(x**2+y**2-(r0)**2)/(2*x*y)
+         if (abs(xyr0).le.1.0d0) then
+            ipfuncMP=(1/pi)*acos(xyr0)*(ak/(x+ac)**ap)*(ak/(y+ac)**ap)
+         else
+            ipfuncMP=0
+         end if
+      end if
 cc      if (kk.eq.3) func=1
-      if (kk.eq.3) ipfunc=1
+      if (kk.eq.3) ipfuncMP=1
      &                  *(ak/(x+ac)**ap)
      &                  *(ak/(y+ac)**ap)
 c      write(6,*) func,x,y
       return
       END
+
 
