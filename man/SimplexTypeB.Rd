@@ -65,7 +65,6 @@ the ratio of the parent points of the smaller sized cluster to the total ones.
   \dontrun{
     ## estimation
     ## need very long c.p.u time in the minimization procedure
-    setOmpNumThreads(2)
     SimplexTypeB(z$offspring, c(mu1,mu2,nu,sig1,sig2), process=3)
   }
 }

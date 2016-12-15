@@ -62,7 +62,6 @@
   \dontrun{
     ## estimation
     ## need long c.p.u time in the minimization procedure
-    setOmpNumThreads(2)
     SimplexThomas(z$offspring, c(mu,nu,sig), process=3)
   }
 }

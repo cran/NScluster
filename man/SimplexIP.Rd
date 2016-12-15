@@ -53,7 +53,6 @@
   \dontrun{
     ## estimation
     ## need very long c.p.u time in the minimization procedure
-    setOmpNumThreads(2)
     SimplexIP(z$offspring, c(mu,nu,p,c), x2=0.3, skip=100, process=3)
   }
 }

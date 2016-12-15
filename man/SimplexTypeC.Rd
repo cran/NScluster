@@ -71,7 +71,6 @@ the ratio of the all offspring points of smaller sized cluster to the total popu
   \dontrun{
     ## estimation
     ## need long c.p.u time in the minimization procedure
-    setOmpNumThreads(2)
     SimplexTypeC(z$offspring, c(mu1,nu1,sig1), c(mu2,nu2,sig2), process=3)
   }
 

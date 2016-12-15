@@ -2,14 +2,10 @@
 
 setOmpNumThreads <- function(nthreads=NULL)
 {
-    if (is.null(nthreads)) nthreads <- 0
+    if (is.null(nthreads)) return()
 
-    z <- .Call("setnthread", as.integer(nthreads))
-
-    max_num_threads <- z[[1L]]
-#    cat(sprintf("maximum number of OpenMP threads %i\n", max_num_threads))
-
-    return(setOmpNumThreads=max_num_threads)
+    z <- .Fortran("setnthread", as.integer(nthreads))
+    return()
 
 }
 

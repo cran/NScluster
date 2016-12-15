@@ -52,7 +52,6 @@
   \dontrun{
     ## estimation
     ## need very long c.p.u time in the minimization procedure
-    setOmpNumThreads(2)
     SimplexTypeA(z$offspring, c(mu,nu,a,sig1,sig2), x2=0.3, skip=1000, process=3)
   }
 }
