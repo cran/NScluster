@@ -2,14 +2,21 @@
 #include <Rdefines.h>
 #include "NScluster.h"
 
-extern void F77_NAME(smplxipf)(double*, double*, int*, int*, double*, double*, double*, double*, double*, double*, double*, int*, int*, int*, double*, double*,double*, double*, double*, int*, int*, int*, int*);
+extern void F77_NAME(smplxipf)(double*, double*, int*, int*, double*, double*,
+                               double*, double*, double*, double*, double*, int*,
+                               int*, int*, double*, double*,double*, double*,
+                               double*, int*, int*, int*, int*);
 
-SEXP smplxIP(SEXP x, SEXP y, SEXP np, SEXP skip, SEXP ty, SEXP sclmu, SEXP sclnu, SEXP sclp, SEXP sclc, SEXP x2, SEXP eps, SEXP itmax, SEXP itmax1, SEXP ipmax, SEXP ipflg)
+SEXP smplxIP(SEXP x, SEXP y, SEXP np, SEXP skip, SEXP ty, SEXP sclmu, SEXP sclnu,
+             SEXP sclp, SEXP sclc, SEXP x2, SEXP eps, SEXP itmax, SEXP itmax1,
+             SEXP ipmax, SEXP ipflg)
 {
     double *d1,*d2,*d3,*d4,*d5,*d6,*d7,*d8,*d9,*d10,*d11,*d12,*d13,*d14;
     int *i1,*i2,*i3,*i4,*i5,*i6,*i7,*i8,*i9;
 
-    SEXP ans = R_NilValue, fn = R_NilValue, mple = R_NilValue, xx = R_NilValue, std = R_NilValue, f = R_NilValue, itr = R_NilValue, nip = R_NilValue, ipr = R_NilValue;
+    SEXP ans = R_NilValue, fn = R_NilValue, mple = R_NilValue, xx = R_NilValue,
+  std = R_NilValue, f = R_NilValue, itr = R_NilValue, nip = R_NilValue,
+  ipr = R_NilValue;
     double *xfn, *xmple, *xxx, *xstd, *xf = NULL;
     int  *xitr, *xnip, *xipr = NULL;
 

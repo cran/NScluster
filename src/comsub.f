@@ -3,14 +3,17 @@
 * common subroutine
 c
 c     Pois     ---   simThomas, simA, simB, simC, simIP
-c     random   ---   simThomas, simA, simB, simC, simIP
+ccc     random   ---   simThomas, simA, simB, simC, simIP
+c     init   ---   simThomas, simA, simB, simC, simIP
+c     genrand   ---   simThomas, simA, simB, simC, simIP
 c
 c     input    ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     simplx   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     minmax   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     first    ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     center   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
-c     epslon(epsln)   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
+c     epslon(epsln)   ---    simplexThomas, simplexIP, simplexA, simplexB,
+c                            simplexC
 c     newsim   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     update   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
 c     reduce   ---    simplexThomas, simplexIP, simplexA, simplexB, simplexC
@@ -34,14 +37,17 @@ c
 ********************************************************************************
 *      *** Poisson random number ***
 cc       subroutine Pois(ram,m)
-       subroutine Pois(ram,m,ix,iy,iz)
+cxx       subroutine Pois(ram,m,ix,iy,iz)
+       subroutine Pois(ram,m)
 cx       implicit real*8(a-h,o-z)
-      integer :: m, ix, iy, iz
+cxx      integer :: m, ix, iy, iz
+      integer :: m
       real(8) :: ram, alogu, u, random
 cc       common ix,iy,iz
        alogu=ram
        m=0
- 10    u=random(ix,iy,iz)       
+cxx 10    u=random(ix,iy,iz)
+ 10    u=random()       
        alogu=alogu+log(u)
        if (alogu.gt.0) then
            m=m+1
@@ -52,21 +58,14 @@ c
 c
        end
 ********************************************************************************
-cc      real function random*8(ix,iy,iz)
-cx      real*8 function random(ix,iy,iz)
-      double precision function random(ix,iy,iz)
-c     WICHMANN+HILL Appl.Statist.(JRSSC) (31) 188-(1982)
-cx      implicit real*8(a-h,o-z)
-      integer :: ix, iy, iz
-      ix=171*mod(ix,177)-2*(ix/177)
-      iy=172*mod(iy,176)-35*(iy/176)
-      iz=170*mod(iz,178)-63*(iz/178)
-      if(ix.lt.0)  ix=ix+30269
-      if(iy.lt.0)  iy=iy+30307
-      if(iz.lt.0)  iz=iz+30323
-      random=mod(float(ix)/30269.0+float(iy)/30307.0
-     &                            +1-float(iz)/30323.0,1.0)
-cx      crandom=float(ix)/30269.0+float(iy)/30307.0+1-float(iz)/30323.0
+      subroutine init(seed)
+      integer :: seed, v(8)
+      if ( seed .ge. 0 ) then
+          call init_genrand64( seed )
+      else
+         call date_and_time( values=v )
+         call init_genrand64( sum(v) )
+      endif
       return
       end
 ********************************************************************************
@@ -463,7 +462,8 @@ c
       end
 c -------------------------------------------------------------------- c
 c -------------------------------------------------------------------- c
-cd  call newsim(n, f, x, rr, nn, funct, x0, xh, alpha, xr,ipmax, nip, ipri, fn, mples, ipflag)
+cd  call newsim(n, f, x, rr, nn, funct, x0, xh, alpha, xr,ipmax, nip, ipri,
+cd              fn, mples, ipflag)
 cc      subroutine newsim(n, f, x, funct, x0, in, prm, out)
       subroutine newsim(n, f, x, rr, nn, funct, x0, in, prm, out,
      &                        ipmax, nip, ipri, fn, mples, ipflag)

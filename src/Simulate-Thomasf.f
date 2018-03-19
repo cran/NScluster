@@ -1,4 +1,5 @@
-      subroutine simThomf(ix,iy,iz,ty,amu,anu,sig,
+ccx      subroutine simThomf(ix,iy,iz,ty,amu,anu,sig,
+      subroutine simThomf(ix,ty,amu,anu,sig,
      &                   npts,ncl,x,y,xcl,ycl,mmax,nmax,ier)
 c
       include 'NScluster_f.h'
@@ -10,7 +11,8 @@ cc       dimension  xcl(100,5000), ycl(100,5000)
 cx       dimension  x(mmax), y(mmax)
 cx       dimension  xcl(mmax,nmax), ycl(mmax,nmax)
 cx       dimension  ncl(mmax)
-      integer :: ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
+ccx      integer :: ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
+      integer :: ix, npts, mmax, ncl(mmax), nmax, ier
       real(8) :: ty, amu, anu, sig, x(mmax), y(mmax), xcl(mmax,nmax),
      1           ycl(mmax,nmax)
       real(8) :: pi, r, theta, xclij, yclij, random
@@ -27,7 +29,9 @@ cc       read(12,*) amu,anu,sig
 c
         amu=amu*ty
 cc        call Pois(amu,npts)
-        call Pois(amu,npts,ix,iy,iz)
+ccx        call Pois(amu,npts,ix,iy,iz)
+        call init(ix)
+        call Pois(amu,npts)
 c---
         np=0
         ier=0
@@ -37,15 +41,18 @@ c---
         end if
 c---
         do 15 i=1, npts
-          x(i)=random(ix,iy,iz)
-          y(i)=random(ix,iy,iz)*ty
-cc          write(11,*) x(i), y(i)               
+ccx          x(i)=random(ix,iy,iz)
+ccx          y(i)=random(ix,iy,iz)*ty
+          x(i)=random()
+          y(i)=random()*ty
+cc          write(11,*) x(i), y(i)
  15     continue  
 cc        write(6,*) '#(parents)=', npts
 c   
         do 25 i=1, npts
 cc          call  Pois(anu,ncl)
-          call  Pois(anu,ncl(i),ix,iy,iz)
+ccx          call  Pois(anu,ncl(i),ix,iy,iz)
+          call  Pois(anu,ncl(i))
 cc          write(6,*) '#(offspring)=', i, ncl
 c---
           if( ncl(i) > nmax ) then
@@ -55,10 +62,12 @@ c---
 c---
 cc          do 35 j=1, ncl
           do 35 j=1, ncl(i)
-            r=sqrt(-2*log(random(ix,iy,iz)))
-            theta=2*pi*(random(ix,iy,iz))
+ccx            r=sqrt(-2*log(random(ix,iy,iz)))
+ccx            theta=2*pi*(random(ix,iy,iz))
+            r=sqrt(-2*log(random()))
+            theta=2*pi*(random())
             np=np+1
-            xclij=x(i)+r*cos(theta)*sig     
+            xclij=x(i)+r*cos(theta)*sig
             yclij=y(i)+r*sin(theta)*sig
             jx=INT(xclij)  
 cx            jy=yclij/ty

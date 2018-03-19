@@ -93,6 +93,3 @@ cc       close(2)
 cc       stop
        return
        end
-
-
-

@@ -1,12 +1,12 @@
-useDynLib(NScluster)
+useDynLib(NScluster, .registration = TRUE)
 
-importFrom("graphics", "abline", "par", "plot", "title", "legend")
+importFrom("graphics", "abline", "par", "plot", "title", "legend", "axis",
+           "points", "rect")
 
 export(SimulateThomas, SimulateIP, SimulateTypeA, SimulateTypeB, SimulateTypeC,
-       SimplexThomas, SimplexIP, SimplexTypeA, SimplexTypeB, SimplexTypeC,
+       EstimateThomas, EstimateIP, EstimateTypeA, EstimateTypeB, EstimateTypeC,
        PalmThomas, PalmIP, PalmTypeA, PalmTypeB, PalmTypeC)
 
 S3method(print, Simulate)
-S3method(print, Simulate2)
-S3method(print, Simplex)
+S3method(print, Estimate)
 S3method(print, Palm)

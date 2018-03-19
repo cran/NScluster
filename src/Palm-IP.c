@@ -3,9 +3,12 @@
 #include <Rdefines.h>
 #include "NScluster.h"
 
-extern void F77_NAME(xqgausipf)(double*, double*, int*, double*, double*, double*, double*, double*, double*, double*, int*, int*, double*, double*);
+extern void F77_NAME(xqgausipf)(double*, double*, int*, double*, double*,
+                                double*, double*, double*, double*, double*,
+                                int*, int*, double*, double*);
 
-SEXP palmIP(SEXP x, SEXP y, SEXP np, SEXP delta, SEXP ty, SEXP x2, SEXP amu, SEXP anu, SEXP p, SEXP c, SEXP m, SEXP jmax)
+SEXP palmIP(SEXP x, SEXP y, SEXP np, SEXP delta, SEXP ty, SEXP x2, SEXP amu,
+            SEXP anu, SEXP p, SEXP c, SEXP m, SEXP jmax)
 {
     double *d1,*d2,*d3,*d4,*d5,*d6,*d7,*d8,*d9,*d10,*d11;
     int *i1,*i2,*i3;

@@ -1,4 +1,5 @@
-      subroutine simAf(ix,iy,iz,ty,amu,anu,a,sig1,sig2,
+ccx      subroutine simAf(ix,iy,iz,ty,amu,anu,a,sig1,sig2,
+      subroutine simAf(ix,ty,amu,anu,a,sig1,sig2,
      &                    npts,ncl,x,y,xcl,ycl,m,n,ier)
 c
       include 'NScluster_f.h'
@@ -10,7 +11,8 @@ cc      dimension  xcl(1000,5000), ycl(1000,5000)
 cx      dimension  x(m), y(m)
 cx      dimension  xcl(m,n), ycl(m,n)
 cx      dimension  ncl(m)
-      integer :: ix, iy, iz, npts, m, ncl(m), n, ier
+ccx      integer :: ix, iy, iz, npts, m, ncl(m), n, ier
+      integer :: ix, npts, m, ncl(m), n, ier
       real(8) :: ty, amu, anu, a, sig1, sig2, x(m), y(m),
      1           xcl(m,n), ycl(m,n)
       real(8) :: pi, r, theta, xclij, yclij, xclij2, yclij2, choice,
@@ -27,7 +29,9 @@ cc      read(12,*) ty
 cc      read(12,*) amu,anu,a,sig1,sig2
 c
 cc      call Pois(amu,npts)
-      call Pois(amu,npts,ix,iy,iz)
+ccx      call Pois(amu,npts,ix,iy,iz)
+      call init(ix)
+      call Pois(amu,npts)
 c---
         np=0
         ier=0
@@ -38,15 +42,18 @@ c---
 c---
 c
       do 15 i=1, npts
-        x(i)=random(ix,iy,iz)
-        y(i)=random(ix,iy,iz)*ty               
-cc        write(11,*) x(i), y(i)    
+ccx        x(i)=random(ix,iy,iz)
+ccx        y(i)=random(ix,iy,iz)*ty
+        x(i)=random()
+        y(i)=random()*ty
+cc        write(11,*) x(i), y(i)
  15     continue
 cc        write(6,*) '#(parents)=', npts
 c
       do 25 i=1, npts
 cc          call  Pois(anu,ncl)
-          call  Pois(anu,ncl(i),ix,iy,iz)
+ccx          call  Pois(anu,ncl(i),ix,iy,iz)
+          call  Pois(anu,ncl(i))
 cc          write(6,*) '#(offspring)=', i, ncl
 c---
           if( ncl(i) > n ) then
@@ -57,12 +64,14 @@ c---
 c
 cc          do 35 j=1, ncl
           do 35 j=1, ncl(i)
-            r=sqrt(-2*log(random(ix,iy,iz)))
-            theta=2*pi*(random(ix,iy,iz))
+ccx            r=sqrt(-2*log(random(ix,iy,iz)))
+ccx            theta=2*pi*(random(ix,iy,iz))
+            r=sqrt(-2*log(random()))
+            theta=2*pi*(random())
             np=np+1
-            xclij=x(i)+r*cos(theta)*sig1     
+            xclij=x(i)+r*cos(theta)*sig1
             yclij=y(i)+r*sin(theta)*sig1
-            xclij2=x(i)+r*cos(theta)*sig2     
+            xclij2=x(i)+r*cos(theta)*sig2
             yclij2=y(i)+r*sin(theta)*sig2
             jx=int(xclij)  
 cx            jy=yclij/ty
@@ -94,7 +103,8 @@ cx            jy2=yclij2/ty
              if (yclij2.ge.ty) then
                yclij2=yclij2-jy2*ty
              end if
-          choice=random(ix,iy,iz)               
+ccx          choice=random(ix,iy,iz)
+          choice=random()
           if(choice.le.a) then
             xcl(i,j)=xclij
             ycl(i,j)=yclij

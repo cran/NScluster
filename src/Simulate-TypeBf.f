@@ -1,4 +1,5 @@
-      subroutine simBf(ix,iy,iz,ty,amu1,amu2,anu1,s1,s2,
+ccx      subroutine simBf(ix,iy,iz,ty,amu1,amu2,anu1,s1,s2,
+      subroutine simBf(ix,ty,amu1,amu2,anu1,s1,s2,
      & m1,ncl1,x1,y1,xx1,yy1,m2,ncl2,x2,y2,xx2,yy2,mmax,nmax,ier)
 c
       include 'NScluster_f.h'
@@ -18,14 +19,15 @@ cx      dimension  xcl2(mmax,nmax), ycl2(mmax,nmax)
 cx      dimension xx1(mmax*nmax), yy1(mmax*nmax)
 cx      dimension xx2(mmax*nmax), yy2(mmax*nmax)
 cx      dimension ncl1(mmax), ncl2(nmax)
-      integer :: ix, iy, iz, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax),
-     1           ier
+ccx      integer :: ix, iy, iz, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax),
+ccx     1           ier
+      integer :: ix, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax), ier
       real(8) :: ty, amu1, amu2, anu1, s1, s2, x1(mmax), y1(mmax),
      1           xx1(mmax*nmax), yy1(mmax*nmax), x2(mmax), y2(mmax),
      2           xx2(mmax*nmax), yy2(mmax*nmax)
       real(8) :: xcl1(mmax,nmax), ycl1(mmax,nmax), xcl2(mmax,nmax),
      1           ycl2(mmax,nmax), pi, r1, r2, theta1, theta2, random,
-     2           xcl1ij , ycl1ij , xcl2ij , ycl2ij 
+     2           xcl1ij , ycl1ij , xcl2ij , ycl2ij
 c
       pi=3.14159265358979d0
 c
@@ -40,7 +42,9 @@ c
 cc      write(6,*) 'a =', amu1/(amu1+amu2)
 c
 cc      call  Pois(amu1,m1)
-      call  Pois(amu1,m1,ix,iy,iz)
+ccx      call  Pois(amu1,m1,ix,iy,iz)
+      call init(ix)
+      call  Pois(amu1,m1)
 c---
         ier=0
         if( m1 > mmax ) then
@@ -50,9 +54,11 @@ c---
 c---
 c
       do 25 i=1, m1
-        x1(i)=random(ix,iy,iz)
-        y1(i)=random(ix,iy,iz)*ty               
-cc        write(11,*) x1(i), y1(i)    
+ccx        x1(i)=random(ix,iy,iz)
+ccx        y1(i)=random(ix,iy,iz)*ty
+        x1(i)=random()
+        y1(i)=random()*ty
+cc        write(11,*) x1(i), y1(i)
  25   continue
 cc        write(6,*) '#(parents)=', m1
 c
@@ -60,7 +66,8 @@ c
       np=0
       do 40 i=1, m1
 cc          call  Pois(anu1,ncl1)
-          call  Pois(anu1,ncl1(i),ix,iy,iz)
+ccx          call  Pois(anu1,ncl1(i),ix,iy,iz)
+          call  Pois(anu1,ncl1(i))
 cc          write(6,*) '#(offspring)=', i, ncl1
 c---
           if( ncl1(i) > nmax ) then
@@ -70,8 +77,10 @@ c---
 c---
 cc        do 45 j=1, ncl1
         do 45 j=1, ncl1(i)
-          r1=sqrt(-2*log(random(ix,iy,iz)))
-          theta1=2*pi*(random(ix,iy,iz))
+ccx          r1=sqrt(-2*log(random(ix,iy,iz)))
+ccx          theta1=2*pi*(random(ix,iy,iz))
+          r1=sqrt(-2*log(random()))
+          theta1=2*pi*(random())
           np1=np1+1
           np=np+1
           xcl1(i,j)=x1(i)+r1*cos(theta1)*s1
@@ -105,7 +114,8 @@ cc          write(10,*) xx1(np1), yy1(np1)
  40     continue
 c----------------------------------------------------------------------
 cc      call  Pois(amu2,m2)
-      call  Pois(amu2,m2,ix,iy,iz)
+ccx      call  Pois(amu2,m2,ix,iy,iz)
+      call  Pois(amu2,m2)
 c---
         if( m2 > mmax ) then
            ier=-2
@@ -113,16 +123,19 @@ c---
         end if
 c---
         do 35 i=1, m2
-          x2(i)=random(ix,iy,iz)
-          y2(i)=random(ix,iy,iz)*ty               
-cc          write(11,*) x2(i), y2(i)    
+ccx          x2(i)=random(ix,iy,iz)
+ccx          y2(i)=random(ix,iy,iz)*ty
+          x2(i)=random()
+          y2(i)=random()*ty
+cc          write(11,*) x2(i), y2(i)
  35     continue
 cc        write(6,*) '#(parents)=', m2
 c
         np2=0
         do 50 i=1, m2
 cc          call  Pois(anu1,ncl2)
-          call  Pois(anu1,ncl2(i),ix,iy,iz)
+ccx          call  Pois(anu1,ncl2(i),ix,iy,iz)
+          call  Pois(anu1,ncl2(i))
 cc          write(6,*) '#(offspring)=', i, ncl2
 c---
           if( ncl2(i) > nmax ) then
@@ -132,11 +145,13 @@ c---
 c---
 cc          do 55 j=1, ncl2
           do 55 j=1, ncl2(i)
-            r2=sqrt(-2*log(random(ix,iy,iz)))
-            theta2=2*pi*(random(ix,iy,iz))
+ccx            r2=sqrt(-2*log(random(ix,iy,iz)))
+ccx            theta2=2*pi*(random(ix,iy,iz))
+            r2=sqrt(-2*log(random()))
+            theta2=2*pi*(random())
             np2=np2+1
             np=np+1
-            xcl2(i,j)=x2(i)+r2*cos(theta2)*s2     
+            xcl2(i,j)=x2(i)+r2*cos(theta2)*s2
             ycl2(i,j)=y2(i)+r2*sin(theta2)*s2
             jx2=int(xcl2(i,j))  
 cx            jy2=ycl2(i,j)/ty

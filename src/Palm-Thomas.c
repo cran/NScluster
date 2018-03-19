@@ -2,9 +2,11 @@
 #include <Rdefines.h>
 #include "NScluster.h"
 
-extern void F77_NAME(palmtf)(double*, double*, int*, double*, double*, double*, double*, double*, int*, int*, double*, double*);
+extern void F77_NAME(palmtf)(double*, double*, int*, double*, double*, double*,
+                             double*, double*, int*, int*, double*, double*);
 
-SEXP palmT(SEXP x, SEXP y, SEXP np, SEXP delta, SEXP ty, SEXP amu, SEXP anu, SEXP v, SEXP m, SEXP jmax)
+SEXP palmT(SEXP x, SEXP y, SEXP np, SEXP delta, SEXP ty, SEXP amu, SEXP anu,
+           SEXP v, SEXP m, SEXP jmax)
 {
     double *d1,*d2,*d3,*d4,*d5,*d6,*d7,*d8,*d9;
     int *i1,*i2,*i3;
