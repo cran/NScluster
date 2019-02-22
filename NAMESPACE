@@ -2,11 +2,17 @@ useDynLib(NScluster, .registration = TRUE)
 
 importFrom("graphics", "abline", "par", "plot", "title", "legend", "axis",
            "points", "rect")
+importFrom("stats", "coef", "quantile", "sd", "lm")
+importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 
-export(SimulateThomas, SimulateIP, SimulateTypeA, SimulateTypeB, SimulateTypeC,
-       EstimateThomas, EstimateIP, EstimateTypeA, EstimateTypeB, EstimateTypeC,
-       PalmThomas, PalmIP, PalmTypeA, PalmTypeB, PalmTypeC)
+export(sim.cppm, mple.cppm, palm.cppm, boot.mple)
 
-S3method(print, Simulate)
-S3method(print, Estimate)
+S3method(print, sim.cpp)
+S3method(print, mple)
 S3method(print, Palm)
+S3method(plot, sim.cpp)
+S3method(plot, mple)
+S3method(plot, Palm)
+S3method(coef, mple)
+S3method(summary, mple)
+S3method(summary, boot.mple)

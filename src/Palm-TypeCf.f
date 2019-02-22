@@ -50,9 +50,9 @@ cx          id=RR(i)/delta+1
           id=int(RR(i)/delta)+1
 cc          nc(id)=nc(id)+1
           if(id.le.jmax)  nc(id)=nc(id)+1
- 25    continue       
-       pi=3.14159265358979d0       
-       delta=0.001d0
+ 25    continue
+cc       pi=3.14159265358979d0       
+cc       delta=0.001d0
 c
 cc       do 35 i=1, 500
        do 35 i=1, jmax
