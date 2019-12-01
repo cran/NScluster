@@ -35,7 +35,8 @@ c
       integer :: iskip
       real(8) :: scla, scls1, scls2, sclnu, sclmu, fmin, x2
       real(8) :: dist, rr(np**2), tx
-      common/paramscl/scla, scls1, scls2, sclnu, sclmu
+cxx      common/paramscl/scla, scls1, scls2, sclnu, sclmu
+      common/aparam/scla, scls1, scls2, sclnu, sclmu
       common /fnmin/ fmin
 cc      common /fname/filea
 cc      character*50 filea
@@ -117,7 +118,8 @@ cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
       common/range/rmin, rmax
-      common/paramscl/scla, scls1, scls2, sclnu, sclmu
+cxx      common/paramscl/scla, scls1, scls2, sclnu, sclmu
+      common/aparam/scla, scls1, scls2, sclnu, sclmu
       common/param/a, s1, s2
       common/events/np
       common /fnmin/ fmin
@@ -359,6 +361,7 @@ cc      if (kk.le.2) func=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx      if (kk.le.2) afuncMP=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx     &     *qx
 cx     &     *qy
+      afuncMP = 0
       if (kk.le.2) then
          xyr0 = (x**2 + y**2 - r0**2)/(2*x*y)
          if (abs(xyr0) .le. 1.0d0) then

@@ -29,7 +29,8 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
 c
       integer :: iskip
       real(8) :: sclp,  sclc,  sclnu,  sclmu, fmin, x2
-      common/paramscl/sclp, sclc, sclnu, sclmu
+ccx      common/paramscl/sclp, sclc, sclnu, sclmu
+      common/paramip/sclp, sclc, sclnu, sclmu
       common /fnmin/ fmin
 cc      common / sizes / tx,ty
       common /skip/iskip
@@ -41,11 +42,11 @@ cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
 cx      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
-      integer :: np, iskip1, itmax, itmax1, ipmax, mples(ipmax,n), iter,
+      integer :: np, iskip1, itmax, itmax1, ipmax, iter,
      1           nip, ipri(ipmax), ipflag
       real(8) :: x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1, x22,
-     1           eps, fn(ipmax),  xinit(n,itmax1),  eps1(itmax1),
-     2           f(itmax1)
+     1           eps, fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
+     2           eps1(itmax1), f(itmax1)
       real(8) :: dist, rr(np**2), tx
       external   ipfunctMP
 c
@@ -121,8 +122,10 @@ c
      1           fmin
       common/ddd/ff, aic
       common/range/rmin, rmax
-      common/paramscl/sclp, sclc, sclnu, sclmu
-      common/param/ap, ac
+ccx      common/paramscl/sclp, sclc, sclnu, sclmu
+cxx      common/param/ap, ac
+      common/paramip/sclp, sclc, sclnu, sclmu
+      common/param1/ap, ac
       common/events/np
       common /fnmin/ fmin
       common /skip/iskip
@@ -221,7 +224,8 @@ c      common/distance/r0
 c      common/case/kk
       real(8) :: x2, ap, ac
       common/interval/x2
-      common/param/ap, ac
+cxx      common/param/ap, ac
+      common/param1/ap, ac
       integer :: kk
       real(8) :: r0
       common/distancep/r0
@@ -367,7 +371,8 @@ cd      real(8) :: x, y
 !$omp threadprivate(/distancep/)
 !$omp threadprivate(/casep/)
 c      common/param/p,c
-      common/param/ap, ac
+cxx      common/param/ap, ac
+      common/param1/ap, ac
       common/param3/qx, qy
 !$omp threadprivate(/param3/)
 c
@@ -381,6 +386,7 @@ cc      if (kk.le.2) func=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx      if (kk.le.2) ipfuncMP=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx     &     *(ak/(x+ac)**ap)
 cx     &     *(ak/(y+ac)**ap)
+      ipfuncMP = 0
       if (kk. le. 2) then
          xyr0 = (x**2 + y**2 - r0**2)/(2*x*y)
          if (abs(xyr0) .le. 1.0d0) then

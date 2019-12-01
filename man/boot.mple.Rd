@@ -6,7 +6,7 @@
   Carry out bootstrap replicates of MPLE on simulated data. 
 }
 \usage{
-boot.mple(mple.out, n = 100, conf.level = 0.95, se = TRUE)
+boot.mple(mple.out, n = 100, conf.level = 0.95, se = TRUE, trace = FALSE)
 
 \method{summary}{boot.mple}(object, \dots)
 }
@@ -16,16 +16,18 @@ boot.mple(mple.out, n = 100, conf.level = 0.95, se = TRUE)
   \item{n}{number of bootstrap replicates performed.}
   \item{conf.level}{the confidence level required.}
   \item{se}{logical. If \code{TRUE} standard errors are returned.}
+  \item{trace}{logical: if \code{TRUE}, a progress bar is shown.}
   \item{object}{an object of class \code{"boot.mple"}.}
   \item{\dots}{ignored.}
 }
 \value{
   \code{boot.mple} returns an object of class \code{"boot.mple"} containing the
     following components:
-  \item{mple}{the values of each parameter (= \code{mple.out$mple}) passed as
-    arguments to function \code{\link{sim.cppm}}.}
-  \item{boot.mples}{a matrix of bootstrap replicates of MPLEs.}
+  \item{boot.mples}{a matrix of \code{n} rows each of which is a bootstrap
+    replicate of the result of calling \code{\link{mple.cppm}}.}
   \item{confint}{confidence intervals for MPLEs.}
+  \item{mple}{MPLE of \code{mple.out} passed as \code{'pars'} argument to
+    \code{\link{sim.cppm}}.}
 }
 \examples{
 ### Thomas Model

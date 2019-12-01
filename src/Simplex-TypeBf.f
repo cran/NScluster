@@ -36,7 +36,8 @@ c
       integer :: iskip
       real(8) :: dist, rr(np**2), tx, ty
 c
-      common/paramscl/sclmu,sclnu,scla1,scls1,scls2
+cxx      common/paramscl/sclmu,sclnu,scla1,scls1,scls2
+      common/bparam/sclmu,sclnu,scla1,scls1,scls2
       common /fnmin/ fmin
 cc      common / sizes / tx,ty
 cc      common /fname/filea
@@ -120,7 +121,8 @@ cc      common/xyod/rr(9234567),th(9234567)
 cx      dimension rr(nn)
       common/ddd/ff, aic
       common/range/rmin, rmax
-      common/paramscl/sclmu, sclnu, scla1, scls1, scls2
+cxx      common/paramscl/sclmu, sclnu, scla1, scls1, scls2
+      common/bparam/sclmu, sclnu, scla1, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c

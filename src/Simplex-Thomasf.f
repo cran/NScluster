@@ -33,7 +33,8 @@ cx      implicit real*8 (a-h, o-z)
      1           fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
      2           eps1(itmax1), f(itmax1)
       real(8) :: sclmu, sclnu, scls, fmin
-      common/paramscl/sclmu, sclnu, scls
+ccx      common/paramscl/sclmu, sclnu, scls
+      common/tparam/sclmu, sclnu, scls
 cc      common / sizes / tx,ty
       common /fnmin/ fmin
 cc      common /fname/filea
@@ -112,7 +113,8 @@ cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
       common/range/rmin, rmax
-      common/paramscl/sclmu, sclnu, scls
+cxx      common/paramscl/sclmu, sclnu, scls
+      common/tparam/sclmu, sclnu, scls
       common/events/np
       common /fnmin/ fmin
 c

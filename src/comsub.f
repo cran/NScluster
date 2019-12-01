@@ -65,6 +65,7 @@ c
       else
          call date_and_time( values=v )
          call init_genrand64( sum(v) )
+         seed = sum(v)
       endif
       return
       end

@@ -36,8 +36,9 @@ c
       integer :: iskip
       real(8) :: scllam, scla, sclnu1, sclnu2, scls1, scls2, fmin,
      1           tx, ty 
-      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
-      common /fnmin/ fmin
+cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
+      common/cparam/scllam, scla, sclnu1, sclnu2, scls1, scls2
+     common /fnmin/ fmin
       common / sizes / tx, ty
 cc      common /fname/filea
       common /skip/iskip
@@ -121,7 +122,8 @@ cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
       common/range/rmin, rmax
-      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
+cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
+      common/cparam/scllam, scla, sclnu1, sclnu2, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c

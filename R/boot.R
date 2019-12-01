@@ -1,9 +1,12 @@
-boot.mple <- function(mple.out, n = 100, conf.level = 0.95, se = TRUE) {
+boot.mple <- function(mple.out, n = 100, conf.level = 0.95, se = TRUE,
+  trace = FALSE) {
 
-  prog <- TRUE
+  prog <- trace
   if (prog){
     pb <- txtProgressBar(min = 0, max = n, style = 3)
   }
+
+  rs <- floor(32768 * runif(n))
 
   model <- mple.out$input.val$model
   pars <- mple.out$mple
@@ -12,7 +15,7 @@ boot.mple <- function(mple.out, n = 100, conf.level = 0.95, se = TRUE) {
   colnames(boot.mples) <- names(pars)
 
   for (i in 1:n) {
-    xy.points <- sim.cppm(model, pars, seed = NULL)$offspring$xy
+    xy.points <- sim.cppm(model, pars, seed = rs[i])$offspring$xy
     np <- dim(xy.points)[1]
     init.pars <- set.pars(model, xy.points)
     names(init.pars) <- names(pars)
@@ -23,6 +26,8 @@ boot.mple <- function(mple.out, n = 100, conf.level = 0.95, se = TRUE) {
       setTxtProgressBar(pb, i)
     }
   }
+  if (prog)
+    cat("\n\n")
 
   prb1 <- (1 - conf.level) / 2
   prb2 <- (1 + conf.level) / 2

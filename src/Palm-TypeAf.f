@@ -170,6 +170,7 @@ cc      if (kk.le.2) func=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx      if (kk.le.2) pafunc=(1/pi)*acos((x**2+y**2-(r0)**2)/(2*x*y))
 cx     &                  *qx
 cx     &                  *qy
+      pafunc=0
       if (kk.le.2) then
          xyr0=(x**2+y**2-(r0)**2)/(2*x*y)
          if (abs(xyr0).le.1.0d0) then
