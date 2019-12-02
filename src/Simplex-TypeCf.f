@@ -34,11 +34,11 @@ cx      implicit real * 8 (a-h,o-z)
      2           xinit(n,itmax1), eps1(itmax1), f(itmax1)
 c
       integer :: iskip
-      real(8) :: scllam, scla, sclnu1, sclnu2, scls1, scls2, fmin,
+      real(8) :: scllam, scla, sclnu1, scls1, scls2, fmin,
      1           tx, ty 
 cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
-      common/cparam/scllam, scla, sclnu1, sclnu2, scls1, scls2
-     common /fnmin/ fmin
+      common/cparam/scllam, scla, sclnu1, scls1, scls2
+      common /fnmin/ fmin
       common / sizes / tx, ty
 cc      common /fname/filea
       common /skip/iskip
@@ -50,6 +50,7 @@ cc      real*8     xinit(maxh), dist, eps, f
       real(8) :: dist, rr(np**2)
 cc      external   funct
       external   cfunctMP
+c
       fmin = 1.d10
 ***************************
 cc      open(13, file='TypeC.param')
@@ -116,14 +117,14 @@ cx      implicit real * 8 (a-h,o-z)
       real(8) :: b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
 c
       integer :: np
-      real(8) :: ff, aic, rmin, rmax, scllam, scla, sclnu1, sclnu2,
+      real(8) :: ff, aic, rmin, rmax, scllam, scla, sclnu1,
      1           scls1, scls2, fmin
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
       common/range/rmin, rmax
 cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
-      common/cparam/scllam, scla, sclnu1, sclnu2, scls1, scls2
+      common/cparam/scllam, scla, sclnu1, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c

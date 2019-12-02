@@ -1,4 +1,4 @@
-3b4ba0052c4597409f9325200305da60 *DESCRIPTION
+6cf1718dfb08f1818eb25e47b66266d4 *DESCRIPTION
 91fb9e4ddc6e8611e73510e01d613806 *NAMESPACE
 de6d8f150d15f2805de32a54cdc9fe2c *R/boot.R
 a468ab8b0feb4f8fa05a0d0db2ca4656 *R/mple.R
@@ -7,7 +7,7 @@ aece71915d5eba9b37569dc8ec9b0db3 *R/palm.R
 4f8a30569f2964e07ccba05cf47f4db1 *build/vignette.rds
 9088a0975d84490ca69f8dee5d099908 *inst/COPYRIGHTS
 fc871caa6ad6077bb7c88ef0ec7aef14 *inst/doc/NScluster.Rnw
-3c6f1b97eafbc5a001a10eab3040099d *inst/doc/NScluster.pdf
+01421c3b5505a745b1c377562591dbd5 *inst/doc/NScluster.pdf
 755d6367e72acc82616644d606b7a421 *man/NScluster-package.Rd
 d5fc9d1415ae1486694547b5e4f90d7a *man/boot.mple.Rd
 b4d05900676730b117bc671f5152ec44 *man/mple.cppm.Rd
@@ -38,7 +38,7 @@ bc592652efa6bd38136d616446451b6d *src/Simplex-TypeA.c
 b6408376a8a200f098a990cbf55211c2 *src/Simplex-TypeB.c
 5d363cafd75b3038e5f11656f2b533bd *src/Simplex-TypeBf.f
 5df30466904e345d8e943137c527094d *src/Simplex-TypeC.c
-c2d4b4efc614ff832ac2c4fedcd56eb4 *src/Simplex-TypeCf.f
+837ca19a6e174e0ff599421d893a2953 *src/Simplex-TypeCf.f
 773169da69d708fb5c71d72765848b8a *src/Simulate-IP.c
 d2ce17e2cf3c5fb9fb6e42e1d24ce02d *src/Simulate-IPf.f
 7e0eb543e0e3092e68dda860ebf04e75 *src/Simulate-Thomas.c
