@@ -1,0 +1,21 @@
+bibentry(bibtype = "Article",
+  title        = "{NScluster}: An {R} Package for Maximum {P}alm Likelihood Estimation for Cluster Point Process Models Using {OpenMP}",
+  author       = c(person(given = "Ushio",
+                          family = "Tanaka",
+                          email = "utanaka@mi.s.osakafu-u.ac.jp"),
+                   person(given = "Masami",
+                          family = "Saga",
+                          email = "msaga@mtb.biglobe.ne.jp"),
+                   person(given = "Junji",
+                          family = "Nakano",
+                          email = "nakanoj@tamacc.chuo-u.ac.jp")),
+  journal      = "Journal of Statistical Software",
+  year         = "2021",
+  volume       = "98",
+  number       = "6",
+  pages        = "1--22",
+  doi          = "10.18637/jss.v098.i06",
+
+  header       = "To cite NScluster/OpenMP in publications use:"
+)
+

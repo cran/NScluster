@@ -51,6 +51,7 @@ NScluster involves the maximum Palm likelihood estimation procedure for
       The package can depict non-parametric and parametric normalized Palm 
       intensity function of the five cluster point process models using the
       \code{\link{palm.cppm}} function.}
+
   }
 }
 \references{
@@ -63,6 +64,10 @@ Tanaka, U., Ogata, Y. and Katsura, K. (2008)
 Tanaka, U., Ogata, Y. and Stoyan, D. (2008)
  Parameter estimation and model selection for Neyman-Scott point processes.
  \emph{Biometrical Journal} \bold{50}, 43-57.
+
+Tanaka, U., Saga, M. and Nakano, J. (2021)
+ NScluster: An R Package for Maximum Palm Likelihood Estimation for Cluster Point Process Models Using OpenMP.
+ \emph{Journal of Statistical Software}, \bold{98(6)}, 1-22. \doi{10.18637/jss.v098.i06}.
 }
 
 \keyword{ package }
