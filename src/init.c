@@ -1,59 +1,54 @@
-#include <R.h>
-#include <Rinternals.h>
-#include <stdlib.h> // for NULL
-#include <R_ext/Rdynload.h>
-
-/* FIXME: 
-   Check these declarations against the C/Fortran source code.
+/*
+*  NScluster : 
+*  Simulation and estimation of the Neyman-Scott Type spatial cluster models
+*  Copyright (C) 2010    The Institute of Statistical Mathematics
+*
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program; if not, write to the Free Software
+*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+*
+*  ismrp at grp.ism.ac.jp
 */
 
-/* .Call calls */
-extern SEXP palmA(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                  SEXP, SEXP, SEXP);
-extern SEXP palmB(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                  SEXP, SEXP);
-extern SEXP palmC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                  SEXP, SEXP);
-extern SEXP palmIP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                   SEXP, SEXP);
-extern SEXP palmT(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP simA(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP simB(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP simC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP simIP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP simThom(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP smplxA(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                   SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP smplxB(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                   SEXP, SEXP, SEXP, SEXP);
-extern SEXP smplxC(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                   SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP smplxIP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                    SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP smplxThom(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
-                      SEXP, SEXP);
+#include "regF77.h"
+#include <R.h>
+#include <Rinternals.h>
+#include <R_ext/Rdynload.h>
+#include <R_ext/Visibility.h>
 
-static const R_CallMethodDef CallEntries[] = {
-    {"palmA",     (DL_FUNC) &palmA,     13},
-    {"palmB",     (DL_FUNC) &palmB,     12},
-    {"palmC",     (DL_FUNC) &palmC,     12},
-    {"palmIP",    (DL_FUNC) &palmIP,    12},
-    {"palmT",     (DL_FUNC) &palmT,     10},
-    {"simA",      (DL_FUNC) &simA,       9},
-    {"simB",      (DL_FUNC) &simB,       9},
-    {"simC",      (DL_FUNC) &simC,      10},
-    {"simIP",     (DL_FUNC) &simIP,      8},
-    {"simThom",   (DL_FUNC) &simThom,    7},
-    {"smplxA",    (DL_FUNC) &smplxA,    16},
-    {"smplxB",    (DL_FUNC) &smplxB,    14},
-    {"smplxC",    (DL_FUNC) &smplxC,    15},
-    {"smplxIP",   (DL_FUNC) &smplxIP,   15},
-    {"smplxThom", (DL_FUNC) &smplxThom, 12},
+/* .Fortran calls */
+
+static const R_FortranMethodDef FortEntries[] = {
+    {"xqgausip",  (DL_FUNC) &F77_NAME(xqgausip),  14},
+    {"palmt",     (DL_FUNC) &F77_NAME(palmt),     12},
+    {"xqgausa",   (DL_FUNC) &F77_NAME(xqgausa),   15},
+    {"palmb",     (DL_FUNC) &F77_NAME(palmb),     14},
+    {"palmc",     (DL_FUNC) &F77_NAME(palmc),     14},
+    {"smplxip",   (DL_FUNC) &F77_NAME(smplxip),   23},
+    {"smplxthom", (DL_FUNC) &F77_NAME(smplxthom), 20},
+    {"smplxa",    (DL_FUNC) &F77_NAME(smplxa),    24},
+    {"smplxb",    (DL_FUNC) &F77_NAME(smplxb),    22},
+    {"smplxc",    (DL_FUNC) &F77_NAME(smplxc),    23},
+    {"simip",     (DL_FUNC) &F77_NAME(simip),     15},
+    {"simthom",   (DL_FUNC) &F77_NAME(simthom),   14},
+    {"sima",      (DL_FUNC) &F77_NAME(sima),      16},
+    {"simb",      (DL_FUNC) &F77_NAME(simb),      22},
+    {"simc",      (DL_FUNC) &F77_NAME(simc),      23},
     {NULL, NULL, 0}
 };
 
-void R_init_NScluster(DllInfo *dll)
+void attribute_visible R_init_NScluster(DllInfo *dll) 
 {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_registerRoutines(dll, NULL, NULL, FortEntries, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

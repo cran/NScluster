@@ -1,8 +1,8 @@
-      subroutine smplxCf(x, y, np, ty1, mu1, mu2, nu1, nu2, scls11,
-     &   scls22, eps, itmax, itmax1, ipmax, fn, mples, xinit, eps1,
-     &   f, iter, nip, ipri, ipflag)
+      subroutine smplxC(x, y, np, ty1, mu1, mu2, nu1, nu2, scls11,
+     &   scls22, eps, itmax, itmax1, ipmax, fn, mples, xinit, eps1, f,
+     &   iter, nip, ipri, ipflag)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 c simplx:  simplex minimization subroutine.
 c minmax:  called by subroutine simplx.
@@ -27,15 +27,13 @@ cc      parameter   (maxh=6, maxh5=maxh+5)
       parameter   (n=5)
 c
 cx      implicit real * 8 (a-h,o-z)
-      integer :: np, itmax, itmax1, ipmax, iter, nip,  ipri(ipmax),
-     1           ipflag
-      real(8) :: x(np), y(np), ty1, mu1, mu2, nu1, nu2, scls11,
-     1           scls22, eps, fn(ipmax), mples(ipmax,n),
-     2           xinit(n,itmax1), eps1(itmax1), f(itmax1)
+      integer np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax), ipflag
+      double precision x(np), y(np), ty1, mu1, mu2, nu1, nu2, scls11,
+     1                 scls22, eps, fn(ipmax), mples(ipmax,n),
+     2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
 c
-      integer :: iskip
-      real(8) :: scllam, scla, sclnu1, scls1, scls2, fmin,
-     1           tx, ty 
+      integer iskip
+      double precision scllam, scla, sclnu1, scls1, scls2, fmin, tx, ty
 cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
       common/cparam/scllam, scla, sclnu1, scls1, scls2
       common /fnmin/ fmin
@@ -47,7 +45,7 @@ cc      character*50 filea
 cx      real*8 scllam,scla,sclnu1,sclnu2,scls1,scls2
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
-      real(8) :: dist, rr(np**2)
+      double precision dist, rr(np**2)
 cc      external   funct
       external   cfunctMP
 c
@@ -113,12 +111,12 @@ c-----------------------------------------------------------------------
 c     likelihood function of the inverse power poisson process
 c-----------------------------------------------------------------------
 cx      implicit real * 8 (a-h,o-z)
-      integer :: n, nn, nip, ipmax, jpri(ipmax), ipflag
-      real(8) :: b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
+      integer n, nn, nip, ipmax, jpri(ipmax), ipflag
+      double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
 c
-      integer :: np
-      real(8) :: ff, aic, rmin, rmax, scllam, scla, sclnu1,
-     1           scls1, scls2, fmin
+      integer np
+      double precision ff, aic, rmin, rmax, scllam, scla, sclnu1,
+     1                 scls1, scls2, fmin
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
@@ -128,9 +126,9 @@ cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c
-      real(8) :: pi, eps, alam, a, a1, a2, nu1, nu2, s1, s2, se, sum,
-     1           s124, s224, exp1rmax, exp2rmax, exp1i, exp2i,
-     2           f, fs1, ainteg1, ainteg2
+      double precision pi, eps, alam, a, a1, a2, nu1, nu2, s1, s2, se,
+     1                 sum, s124, s224, exp1rmax, exp2rmax, exp1i,
+     2                 exp2i, f, fs1, ainteg1, ainteg2
       data pi/3.14159265358979d0/
 cc      dimension b(6),g(6),h(6)
       pi = 3.14159265358979d0

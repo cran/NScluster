@@ -30,15 +30,22 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   c <- pa[4]
   pars1 <- c(mu, nu, p, c)
 
-  z <- .Call("simIP",
-             as.integer(ix),
-             as.double(ty),
-             as.double(mu),
-             as.double(nu),
-             as.double(p),
-             as.double(c),
-             as.integer(pmax),
-             as.integer(omax))
+  z <- .Fortran(C_simip,
+                as.integer(ix),
+                as.double(ty),
+                as.double(mu),
+                as.double(nu),
+                as.double(p),
+                as.double(c),
+                npts = integer(1),
+                ncl = integer(pmax),
+                x = double(pmax),
+                y = double(pmax),
+                xcl = double(pmax*omax),
+                ycl = double(pmax*omax),
+                as.integer(pmax),
+                as.integer(omax),
+                ier = integer(1))
 
   } else   if (model == "Thomas") {
 
@@ -53,14 +60,21 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   sigma <- pa[3]
   pars1 <- c(mu, nu, sigma)
 
-  z <- .Call("simThom",
-             as.integer(ix),
-             as.double(ty),
-             as.double(mu),
-             as.double(nu),
-             as.double(sigma),
-             as.integer(pmax),
-             as.integer(omax))
+  z <- .Fortran(C_simthom,
+                as.integer(ix),
+                as.double(ty),
+                as.double(mu),
+                as.double(nu),
+                as.double(sigma),
+                npts = integer(1),
+                ncl = integer(pmax),
+                x = double(pmax),
+                y = double(pmax),
+                xcl = double(pmax*omax),
+                ycl = double(pmax*omax),
+                as.integer(pmax),
+                as.integer(omax),
+                ier = integer(1))
 
   } else if (model == "TypeA") {
 
@@ -77,16 +91,23 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   sigma2 <- pa[5]
   pars1 <- c(mu, nu, a, sigma1, sigma2)
 
-  z <- .Call("simA",
-             as.integer(ix),
-             as.double(ty),
-             as.double(mu),
-             as.double(nu),
-             as.double(a),
-             as.double(sigma1),
-             as.double(sigma2),
-             as.integer(pmax),
-             as.integer(omax))
+  z <- .Fortran(C_sima,
+                as.integer(ix),
+                as.double(ty),
+                as.double(mu),
+                as.double(nu),
+                as.double(a),
+                as.double(sigma1),
+                as.double(sigma2),
+                npts = integer(1),
+                ncl = integer(pmax),
+                x = double(pmax),
+                y = double(pmax),
+                xcl = double(pmax*omax),
+                ycl = double(pmax*omax),
+                as.integer(pmax),
+                as.integer(omax),
+                ier = integer(1))
 
   } else if (model == "TypeB") {
 
@@ -103,16 +124,29 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   sigma2 <- pa[5]
   pars1 <- c(mu1, mu2, nu, sigma1, sigma2)
 
-  z <- .Call("simB",
-             as.integer(ix),
-             as.double(ty),
-             as.double(mu1),
-             as.double(mu2),
-             as.double(nu),
-             as.double(sigma1),
-             as.double(sigma2),
-             as.integer(pmax),
-             as.integer(omax))
+  z <- .Fortran(C_simb,
+                as.integer(ix),
+                as.double(ty),
+                as.double(mu1),
+                as.double(mu2),
+                as.double(nu),
+                as.double(sigma1),
+                as.double(sigma2),
+                m1 = integer(1),
+                ncl1 = integer(pmax),
+                x1 = double(pmax),
+                y1 = double(pmax),
+                xx1 = double(pmax*omax),
+                yy1 = double(pmax*omax),
+                m2 = integer(1),
+                ncl2 = integer(pmax),
+                x2 = double(pmax),
+                y2 = double(pmax),
+                xx2 = double(pmax*omax),
+                yy2 = double(pmax*omax),
+                as.integer(pmax),
+                as.integer(omax),
+                ier = integer(1))
 
   } else if (model == "TypeC") {
 
@@ -134,17 +168,30 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   pmax <- pmax * 3
   omax <- omax * 3
 
-  z <- .Call("simC",
-             as.integer(ix),
-             as.double(ty),
-             as.double(mu1),
-             as.double(mu2),
-             as.double(nu1),
-             as.double(nu2),
-             as.double(sigma1),
-             as.double(sigma2),
-             as.integer(pmax),
-             as.integer(omax))
+  z <- .Fortran(C_simc,
+                as.integer(ix),
+                as.double(ty),
+                as.double(mu1),
+                as.double(mu2),
+                as.double(nu1),
+                as.double(nu2),
+                as.double(sigma1),
+                as.double(sigma2),
+                m1 = integer(1),
+                ncl1 = integer(pmax),
+                x1 = double(pmax),
+                y1 = double(pmax),
+                xx1 = double(pmax*omax),
+                yy1 = double(pmax*omax),
+                m2 = integer(1),
+                ncl2 = integer(pmax),
+                x2 = double(pmax),
+                y2 = double(pmax),
+                xx2 = double(pmax*omax),
+                yy2 = double(pmax*omax),
+                as.integer(pmax),
+                as.integer(omax),
+                ier = integer(1))
 
   } else {
     stop("the model type is invalid.")
@@ -152,7 +199,7 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
   
   if (model != "TypeB"  && model != "TypeC") {  # IP, Thomas, TypeA
 
-    ier <- z[[7L]]
+    ier <- z$ier
     if (ier == -1) {
       stop(paste("too many parents (the default maximum number is ", pmax, ")"),
            call. = FALSE)
@@ -162,12 +209,12 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
            call. = FALSE)
     } else {
 
-      npts <- z[[1L]]
-      ncl <- z[[2L]]
-      parents.x <- z[[3L]][1:npts]
-      parents.y <- z[[4L]][1:npts]
-      xcl <- array(z[[5L]], dim = c(pmax, omax))
-      ycl <- array(z[[6L]], dim = c(pmax, omax))
+      npts <- z$npts
+      ncl <- z$ncl
+      parents.x <- z$x[1:npts]
+      parents.y <- z$y[1:npts]
+      xcl <- array(z$xcl, dim = c(pmax, omax))
+      ycl <- array(z$ycl, dim = c(pmax, omax))
 
       parents.xy <- array(c(parents.x, parents.y), dim = c(npts, 2))
 
@@ -186,31 +233,31 @@ sim.cppm <- function(model = "Thomas", pars, seed = NULL) {
 
   } else {  # TypeB, TypeC 
 
-    if (z[[13L]] == -1 || z[[13L]] == -2) {
+    ier <- z$ier
+    if (ier == -1 || ier == -2) {
       stop(paste("too many parents (the default maximum number is ", pmax, ")"),
            call. = FALSE)
-    } else if (z[[13L]] == -11 || z[[13L]] == -22) {
+    } else if (ier == -11 || ier == -22) {
       stop(paste(
 	       "too many offspring (the default maximum number is ", omax, ")"),
            call. = FALSE)
     } else {
 
-      m1 <- z[[1L]]
-      m2 <- z[[7L]]
-      parents1.x <- z[[3L]][1:m1]
-      parents1.y <- z[[4L]][1:m1]
-      parents2.x <- z[[9L]][1:m2]
-      parents2.y <- z[[10L]][1:m2]
+      m1 <- z$m1
+      m2 <- z$m2
+      parents1.x <- z$x1[1:m1]
+      parents1.y <- z$y1[1:m1]
+      parents2.x <- z$x2[1:m2]
+      parents2.y <- z$y2[1:m2]
       parents.xy <- array(0, dim = c(m1 + m2, 2))
       parents.xy[, 1] <- c(parents1.x, parents2.x)
       parents.xy[, 2] <- c(parents1.y, parents2.y)
-
-      np1 <- sum(z[[2L]][1:m1])
-      offspring1.x <- z[[5L]][1:np1]
-      offspring1.y <- z[[6L]][1:np1]
-      np2 <- sum(z[[8L]][1:m2])
-      offspring2.x <- z[[11L]][1:np2]
-      offspring2.y <- z[[12L]][1:np2]
+      np1 <- sum(z$ncl1[1:m1])
+      offspring1.x <- z$xx1[1:np1]
+      offspring1.y <- z$yy1[1:np1]
+      np2 <- sum(z$ncl2[1:m2])
+      offspring2.x <- z$xx2[1:np2]
+      offspring2.y <- z$yy2[1:np2]
       offspring.xy <- array(0, dim = c(np1 + np2, 2))
       offspring.xy[, 1] <- c(offspring1.x, offspring2.x)
       offspring.xy[, 2] <- c(offspring1.y, offspring2.y)

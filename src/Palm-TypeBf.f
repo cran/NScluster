@@ -1,22 +1,22 @@
-       subroutine palmBf(x,y,np,delta,ty1,amu,anu,a,s1,s2,m,jmax,
-     &                   palm,palm1)
+       subroutine palmb(x,y,np,delta,ty1,amu,anu,a,s1,s2,m,jmax,
+     &                  palm,palm1)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx       implicit real*8(a-h,o-z)
 cc       dimension  x(2000),y(2000), RR(4000000)
 cc       dimension  nc(1000),palm(1000),palm1(1000,10)
 cc       common/events/np
-       integer :: np, m, jmax
-       real(8) :: x(np), y(np), delta, ty1, amu(m), anu(m), a(m), 
-     1            s1(m), s2(m), palm(jmax), palm1(jmax,m)
-       real(8) :: tx, ty
+       integer np, m, jmax
+       double precision x(np), y(np), delta, ty1, amu(m), anu(m), a(m),
+     1                  s1(m), s2(m), palm(jmax), palm1(jmax,m)
+       double precision tx, ty
 cx       dimension  x(np),y(np), RR(np*np)
 cx       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
 cx       dimension  amu(m), anu(m), a(m), s1(m), s2(m)
        common / sizes / tx,ty
-       integer :: nc(jmax)
-       real(8) :: RR(np*np), pi, t, r, alam, ae1, ae2
+       integer nc(jmax)
+       double precision RR(np*np), pi, t, r, alam, ae1, ae2
 cc       character*50 fname
 cc       open(2,file='TypeBparam.palm')
 cc       read(2,2) fname

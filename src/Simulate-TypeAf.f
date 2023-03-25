@@ -1,8 +1,8 @@
 ccx      subroutine simAf(ix,iy,iz,ty,amu,anu,a,sig1,sig2,
-      subroutine simAf(ix,ty,amu,anu,a,sig1,sig2,
-     &                    npts,ncl,x,y,xcl,ycl,m,n,ier)
+      subroutine simA(ix,ty,amu,anu,a,sig1,sig2,npts,ncl,x,y,xcl,ycl,
+     &                m,n,ier)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
@@ -11,12 +11,12 @@ cc      dimension  xcl(1000,5000), ycl(1000,5000)
 cx      dimension  x(m), y(m)
 cx      dimension  xcl(m,n), ycl(m,n)
 cx      dimension  ncl(m)
-ccx      integer :: ix, iy, iz, npts, m, ncl(m), n, ier
-      integer :: ix, npts, m, ncl(m), n, ier
-      real(8) :: ty, amu, anu, a, sig1, sig2, x(m), y(m),
-     1           xcl(m,n), ycl(m,n)
-      real(8) :: pi, r, theta, xclij, yclij, xclij2, yclij2, choice,
-     1           random
+ccx      integer ix, iy, iz, npts, m, ncl(m), n, ier
+      integer ix, npts, m, ncl(m), n, ier
+      double precision ty, amu, anu, a, sig1, sig2, x(m), y(m),
+     1                 xcl(m,n), ycl(m,n)
+      double precision pi, r, theta, xclij, yclij, xclij2, yclij2,
+     1                 choice, random
 c
       pi=3.14159265358979d0
 c

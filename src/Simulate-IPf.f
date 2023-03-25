@@ -1,8 +1,8 @@
 cxx      subroutine simIPf(ix,iy,iz,ty,amu,anu,p,c,
-      subroutine simIPf(ix,ty,amu,anu,p,c,
-     &                  npts,ncl,x,y,xcl,ycl,mmax,nmax,ier)
+      subroutine simIP(ix,ty,amu,anu,p,c,npts,ncl,x,y,xcl,ycl,
+     &                 mmax,nmax,ier)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
@@ -11,11 +11,11 @@ cc      dimension  xcl(100,5000), ycl(100,5000)
 cx      dimension  x(mmax), y(mmax)
 cx      dimension  xcl(mmax,nmax), ycl(mmax,nmax)
 cx      dimension  ncl(mmax)
-cxx      integer :: ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
-      integer :: ix, npts, mmax, ncl(mmax), nmax, ier
-      real(8) :: ty, amu, anu, p, c, x(mmax), y(mmax), xcl(mmax,nmax),
-     1           ycl(mmax,nmax)
-      real(8) :: pi, ak, r, theta, xclij, yclij, random
+cxx      integer ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
+      integer ix, npts, mmax, ncl(mmax), nmax, ier
+      double precision ty, amu, anu, p, c, x(mmax), y(mmax),
+     1                 xcl(mmax,nmax), ycl(mmax,nmax)
+      double precision pi, ak, r, theta, xclij, yclij, random
 c
         pi = 3.14159265358979d0
 c

@@ -1,16 +1,16 @@
 cc      PROGRAM xqgaus
-      subroutine xqgausIPf(x,y,np,delta,ty1,x22,amu,anu,
-     &                     p1,c1,m,jmax,palm,palm1)
+      subroutine xqgausip(x,y,np,delta,ty1,x22,amu,anu,p1,c1,m,jmax,
+     &                    palm,palm1)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
-      integer :: np, m, jmax
-      real(8) :: x(np), y(np), delta, ty1, x22, amu(m), anu(m), p1(m),
-     1           c1(m), palm(jmax), palm1(jmax,m)
-      integer :: kk
-      real(8) :: r0, p, c, tx, ty
+      integer np, m, jmax
+      double precision x(np), y(np), delta, ty1, x22, amu(m), anu(m),
+     1                 p1(m), c1(m), palm(jmax), palm1(jmax,m)
+      integer kk
+      double precision r0, p, c, tx, ty
       common/distance/r0
       common/case/kk
       common/pc/p,c
@@ -21,9 +21,9 @@ cc      dimension  nc(1000),palm(1000),palm1(1000,10)
 cx      dimension  x(np),y(np), RR(np*np)
 cx      dimension  nc(jmax),palm(jmax),palm1(jmax,m)
 cx      dimension  amu(m),anu(m),p1(m),c1(m)
-      integer :: nc(jmax), NVAL, i
-      real(8) :: RR(np*np), x2, pi, t, r, x1, ss, tt, uu, Fr, eps, 
-     1           Freps1, Freps2, dFr
+      integer nc(jmax), NVAL, i
+      double precision RR(np*np), x2, pi, t, r, x1, ss, tt, uu, Fr, eps,
+     1                 Freps1, Freps2, dFr
 cc      character*50 fname
 cx      INTEGER NVAL
 c     PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
@@ -152,13 +152,13 @@ cc      real*8 FUNCTION func(x,y)
 cx      real*8 FUNCTION pipfunc(x,y)
       DOUBLE PRECISION FUNCTION pipfunc(x,y)
 cx      implicit real*8(a-h,o-z)
-      real(8) :: x, y
-      integer :: kk
-      real(8) :: r0, p, c
+      double precision x, y
+      integer kk
+      double precision r0, p, c
       common/distance/r0
       common/case/kk
       common/pc/p,c
-      real(8) :: pi, ak, qx, qy, xyr0
+      double precision pi, ak, qx, qy, xyr0
       pi=3.14159265358979d0
 c
       ak=(p-1)*(c**(p-1)) 

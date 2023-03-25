@@ -1,16 +1,16 @@
 cc      PROGRAM xqgaus
-      subroutine xqgausAf(x,y,np,delta,ty1,x2,amu,anu,aa,ss1,ss2,
-     $                    m,jmax,palm,palm1)
+      subroutine xqgausa(x,y,np,delta,ty1,x2,amu,anu,aa,ss1,ss2,m,jmax,
+     $                   palm,palm1)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
-      integer :: np,m, jmax
-      real(8) :: x(np), y(np), delta, ty1, x2, amu(m), anu(m), aa(m),
-     1           ss1(m), ss2(m), palm(jmax), palm1(jmax,m)
-      integer :: kk 
-      real(8) :: r0, a, s1, s2, tx, ty
+      integer np,m, jmax
+      double precision x(np), y(np), delta, ty1, x2, amu(m), anu(m),
+     1                 aa(m), ss1(m), ss2(m), palm(jmax), palm1(jmax,m)
+      integer kk 
+      double precision r0, a, s1, s2, tx, ty
       common/distance/r0
       common/case/kk
       common/av/a,s1,s2
@@ -25,9 +25,9 @@ cc      character*50 fname
 cx      INTEGER NVAL
 c     PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
-      integer :: nc(jmax), NVAL, i
-      real(8) :: RR(np*np), pi, t, r, x1, ss, tt, uu, Fr, eps,
-     1           Freps1, Freps2, dFr
+      integer nc(jmax), NVAL, i
+      double precision RR(np*np), pi, t, r, x1, ss, tt, uu, Fr, eps,
+     1                 Freps1, Freps2, dFr
 c      EXTERNAL func
       EXTERNAL pafunc
 cc      open(2,file='TypeAparam.palm')
@@ -152,13 +152,13 @@ cc      real*8 FUNCTION func(x,y)
 cx      real*8 FUNCTION pafunc(x,y)
       DOUBLE PRECISION FUNCTION pafunc(x,y)
 cx      implicit real*8(a-h,o-z)
-      real(8) :: x, y
-      integer :: kk
-      real(8) :: r0, a, s1, s2
+      double precision x, y
+      integer kk
+      double precision r0, a, s1, s2
       common/distance/r0
       common/case/kk
       common/av/a,s1,s2
-      real(8) :: pi, qx, qy, xyr0
+      double precision pi, qx, qy, xyr0
       pi=3.14159265358979d0
 c
        qx = a/((s1)**2)*x*exp(-x**2/(2*(s1)**2))

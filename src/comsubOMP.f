@@ -1,4 +1,4 @@
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 ********************************************************************************
 * common subroutine
 c
@@ -9,9 +9,9 @@ c
 cc      SUBROUTINE qgausx(func,a,b,ss)
       SUBROUTINE qgausxMP(func,a,b)
 cx      implicit real*8(a-h,o-z)
-      real(8), EXTERNAL :: func
-      real(8) :: a, b
-      real(8) :: r0
+      double precision, EXTERNAL :: func
+      double precision a, b
+      double precision r0
 cxx      common/distance/r0
       common/distancep/r0
 
@@ -23,9 +23,9 @@ cx      dimension w(5), x(5)
 c
 cxx      common/case/kk
 cxx      COMMON /xyz/ xx,yy,zz
-      integer :: j, kk
-      real(8) :: xx, yy, zz, xxm, xxr, xdx, xss, yy1, yy2, yy3,
-     1           hMP1, hMP2, yxm, yxr, ydx, yss, fMP1, fMP2
+      integer j, kk
+      double precision xx, yy, zz, xxm, xxr, xdx, xss, yy1, yy2, yy3,
+     1                 hMP1, hMP2, yxm, yxr, ydx, yss, fMP1, fMP2
       common/casep/kk
       COMMON /xyzp/ xx,yy,zz
       common/param4/xxm,xxr,xdx,xss,yy1,yy2,yy3,hMP1,hMP2
@@ -37,7 +37,7 @@ c
 !$omp threadprivate(/param4/)
 !$omp threadprivate(/param5/)
 c
-      real(8) :: w(5), x(5), ss
+      double precision w(5), x(5), ss
       SAVE w,x
       DATA w/.2955242247d0,.2692667193d0,.2190863625d0,.1494513491d0,
      *.0666713443d0/
@@ -82,9 +82,9 @@ cc      ss=xr*ss
 cc      SUBROUTINE qgausy(func,a,b,ss)
       SUBROUTINE qgausyMP(func,a,b)
 cx      implicit real*8(a-h,o-z)
-      real(8), EXTERNAL :: func
-      real(8) :: a, b
-      real(8) :: r0
+      double precision, EXTERNAL :: func
+      double precision a, b
+      double precision r0
 cxx      common/distance/r0
       common/distancep/r0
 c      REAL a,b,ss,func
@@ -94,8 +94,8 @@ c      REAL dx,xm,xr,w(5),x(5)
 cx      dimension w(5), x(5)
 c
 cxx      COMMON /xyz/ xx,yy,zz
-      real(8) :: xx, yy, zz, xxm, xxr, xdx, xss, yy1, yy2, yy3,
-     1           hMP1, hMP2, yxm, yxr, ydx, yss, fMP1, fMP2
+      double precision xx, yy, zz, xxm, xxr, xdx, xss, yy1, yy2, yy3,
+     1                 hMP1, hMP2, yxm, yxr, ydx, yss, fMP1, fMP2
       COMMON /xyzp/ xx,yy,zz
       common/param4/xxm,xxr,xdx,xss,yy1,yy2,yy3,hMP1,hMP2
       common/param5/yxm,yxr,ydx,yss,fMP1,fMP2
@@ -105,7 +105,7 @@ c
 !$omp threadprivate(/param4/)
 !$omp threadprivate(/param5/)
 c
-      real(8) :: w(5), x(5), ss
+      double precision w(5), x(5), ss
       SAVE w,x
       DATA w/.2955242247d0,.2692667193d0,.2190863625d0,.1494513491d0,
      *.0666713443d0/

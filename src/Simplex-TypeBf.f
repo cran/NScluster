@@ -1,8 +1,8 @@
-      subroutine smplxBf(x, y, np, ty1, mu1, mu2, nu1, scls11,
-     &    scls22, eps, itmax, itmax1, ipmax, fn, mples, xinit, eps1,
-     &    f, iter, nip, ipri, ipflag)
+      subroutine smplxB(x, y, np, ty1, mu1, mu2, nu1, scls11, scls22,
+     &    eps, itmax, itmax1, ipmax, fn, mples, xinit, eps1, f, iter,
+     &    nip, ipri, ipflag)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 c simplx:  simplex minimization subroutine.
 c minmax:  called by subroutine simplx.
@@ -27,14 +27,13 @@ cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
       parameter   (n=5)
 c
-      integer :: np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax),
-     1            ipflag
-      real(8) :: x(np), y(np), ty1, mu1, mu2, nu1, scls11, scls22,
-     1           eps, fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
-     2           eps1(itmax1), f(itmax1)
-      real(8) :: sclmu, sclnu, scla1, scls1, scls2, fmin
-      integer :: iskip
-      real(8) :: dist, rr(np**2), tx, ty
+      integer np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax), ipflag
+      double precision x(np), y(np), ty1, mu1, mu2, nu1, scls11, scls22,
+     1                 eps, fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
+     2                 eps1(itmax1), f(itmax1)
+      double precision sclmu, sclnu, scla1, scls1, scls2, fmin
+      integer iskip
+      double precision dist, rr(np**2), tx, ty
 c
 cxx      common/paramscl/sclmu,sclnu,scla1,scls1,scls2
       common/bparam/sclmu,sclnu,scla1,scls1,scls2
@@ -110,12 +109,12 @@ c-----------------------------------------------------------------------
 c     likelihood function of the inverse power poisson process
 c-----------------------------------------------------------------------
 cc      implicit real * 8 (a-h,o-z)
-      integer :: n, nn, nip, ipmax, jpri(ipmax), ipflag
-      real(8) :: b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
+      integer n, nn, nip, ipmax, jpri(ipmax), ipflag
+      double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
 c
-      integer :: np
-      real(8) :: ff, aic, rmin, rmax, sclmu, sclnu, scla1, scls1,
-     1           scls2, fmin
+      integer np
+      double precision ff, aic, rmin, rmax, sclmu, sclnu, scla1, scls1,
+     1                 scls2, fmin
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
 cx      dimension rr(nn)
@@ -126,8 +125,8 @@ cxx      common/paramscl/sclmu, sclnu, scla1, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c
-      real(8) :: pi, eps, mu, nu, a1, s1, s2, se, sum, lambda, f,
-     1           s124, s224, fs1, ainteg1, ainteg2
+      double precision pi, eps, mu, nu, a1, s1, s2, se, sum, lambda, f,
+     1                 s124, s224, fs1, ainteg1, ainteg2
       data pi/3.14159265358979d0/
 cc      dimension b(5),g(5),h(5)
       pi = 3.14159265358979d0

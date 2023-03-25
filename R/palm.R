@@ -48,20 +48,21 @@ palm.cppm <- function(mple, pars = NULL, delta = 0.001, uplimit = 0.3) {
       lname <- c(lname, "true")
     }
 
-    z <- .Call("palmIP",
-                as.double(x),
-                as.double(y),
-                as.integer(np),
-                as.double(delta),
-                as.double(ty),
-                as.double(uplimit),
-                as.double(mu),
-                as.double(nu),
-                as.double(p),
-                as.double(c),
-                as.integer(m),
-                as.integer(jmax))
-
+    z <- .Fortran(C_xqgausip,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(delta),
+                  as.double(ty),
+                  as.double(uplimit),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(p),
+                  as.double(c),
+                  as.integer(m),
+                  as.integer(jmax),
+                  palm = double(jmax),
+                  palm1 = double(m*jmax))
 
   } else if (model == "Thomas") {
 
@@ -80,18 +81,19 @@ palm.cppm <- function(mple, pars = NULL, delta = 0.001, uplimit = 0.3) {
       lname <- c(lname, "true")
     }
 
-    z <- .Call("palmT",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(delta),
-               as.double(ty),
-               as.double(mu),
-               as.double(nu),
-               as.double(sigma),
-               as.integer(m),
-               as.integer(jmax))
-
+    z <- .Fortran(C_palmt,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(delta),
+                  as.double(ty),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(sigma),
+                  as.integer(m),
+                  as.integer(jmax),
+                  palm = double(jmax),
+                  palm1 = double(m*jmax))
 
   } else if (model == "TypeA") {
 
@@ -115,21 +117,22 @@ palm.cppm <- function(mple, pars = NULL, delta = 0.001, uplimit = 0.3) {
       lname <- c(lname, "true")
     }
 
-    z <- .Call("palmA",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(delta),
-               as.double(ty),
-               as.double(uplimit),
-                as.double(mu),
-               as.double(nu),
-               as.double(a),
-               as.double(sigma1),
-               as.double(sigma2),
-               as.integer(m),
-               as.integer(jmax))
-
+    z <- .Fortran(C_xqgausa,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(delta),
+                  as.double(ty),
+                  as.double(uplimit),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(a),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.integer(m),
+                  as.integer(jmax),
+                  palm = double(jmax),
+                  palm1 = double(m*jmax))
 
   } else if (model == "TypeB") {
 
@@ -153,20 +156,21 @@ palm.cppm <- function(mple, pars = NULL, delta = 0.001, uplimit = 0.3) {
       lname <- c(lname, "true")
     }
 
-  z <- .Call("palmB",
-             as.double(x),
-             as.double(y),
-             as.integer(np),
-             as.double(delta),
-             as.double(ty),
-             as.double(mu),
-             as.double(nu),
-             as.double(a),
-             as.double(sigma1),
-             as.double(sigma2),
-             as.integer(m),
-             as.integer(jmax))
-
+    z <- .Fortran(C_palmb,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(delta),
+                  as.double(ty),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(a),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.integer(m),
+                  as.integer(jmax),
+                  palm = double(jmax),
+                  palm1 = double(m*jmax))
 
   } else if (model == "TypeC") {
 
@@ -190,24 +194,27 @@ palm.cppm <- function(mple, pars = NULL, delta = 0.001, uplimit = 0.3) {
       lname <- c(lname, "true")
     }
 
-    z <- .Call("palmC",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(delta),
-               as.double(ty),
-               as.double(lamb),
-               as.double(nu1),
-               as.double(a),
-               as.double(sigma1),
-               as.double(sigma2),
-               as.integer(m),
-               as.integer(jmax))
+    z <- .Fortran(C_palmc,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(delta),
+                  as.double(ty),
+                  as.double(lamb),
+                  as.double(nu1),
+                  as.double(a),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.integer(m),
+                  as.integer(jmax),
+                  palm = double(jmax),
+                  palm1 = double(m*jmax))
+
   }
 
-  palm <- z[[1L]]
+  palm <- z$palm
   r <- rep(1:jmax) * delta
-  palm1 <- array(z[[2L]], dim = c(jmax, m))
+  palm1 <- array(z$palm1, dim = c(jmax, m))
   colnames(palm1) <- lname
 
   out <- list(r = r, np.palm = palm, norm.palm = palm1)
@@ -270,7 +277,7 @@ plot.Palm <- function(x, ..., log = "xy") {
   if (n != 0)
     for (i in 1:n) {
       obj <- argh[[i]]
-      if (class(obj) != "Palm") {
+      if (is(obj) != "Palm") {
         warning("Additional object is invalid 'class' and was ignored.",
                 call. = FALSE )
       } else if (all.equal(r, obj$r) != TRUE) {

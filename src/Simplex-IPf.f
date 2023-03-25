@@ -1,8 +1,8 @@
-      subroutine smplxIPf(x, y, np, iskip1, ty, sclmu1, sclnu1, sclp1,
+      subroutine smplxIP(x, y, np, iskip1, ty, sclmu1, sclnu1, sclp1,
      &   sclc1, x22, eps, itmax, itmax1, ipmax, fn, mples, xinit, eps1,
      &   f, iter, nip, ipri, ipflag)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 c simplx:  simplex minimization subroutine.
 c minmax:  called by subroutine simplx.
@@ -27,8 +27,8 @@ cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
       parameter   (n=4)
 c
-      integer :: iskip
-      real(8) :: sclp,  sclc,  sclnu,  sclmu, fmin, x2
+      integer iskip
+      double precision sclp,  sclc,  sclnu,  sclmu, fmin, x2
 ccx      common/paramscl/sclp, sclc, sclnu, sclmu
       common/paramip/sclp, sclc, sclnu, sclmu
       common /fnmin/ fmin
@@ -42,12 +42,12 @@ cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
 cx      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
-      integer :: np, iskip1, itmax, itmax1, ipmax, iter,
-     1           nip, ipri(ipmax), ipflag
-      real(8) :: x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1, x22,
-     1           eps, fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
-     2           eps1(itmax1), f(itmax1)
-      real(8) :: dist, rr(np**2), tx
+      integer np, iskip1, itmax, itmax1, ipmax, iter, nip,
+     1        ipri(ipmax), ipflag
+      double precision x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1,
+     1                 x22, eps, fn(ipmax), mples(ipmax,n),
+     2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
+      double precision dist, rr(np**2), tx
       external   ipfunctMP
 c
 cx      dimension  x(np), y(np), rr(np**2)
@@ -114,12 +114,12 @@ c-----------------------------------------------------------------------
 cx      implicit real * 8 (a-h,o-z)
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
-      integer :: n, nn, nip, ipmax, jpri(ipmax), ipflag
-      real(8) :: b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
+      integer n, nn, nip, ipmax, jpri(ipmax), ipflag
+      double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
 c
-      integer :: np, iskip
-      real(8) :: ff, aic, rmin, rmax, sclp, sclc, sclnu, sclmu, ap, ac,
-     1           fmin
+      integer np, iskip
+      double precision ff, aic, rmin, rmax, sclp, sclc, sclnu, sclmu,
+     1                 ap, ac, fmin
       common/ddd/ff, aic
       common/range/rmin, rmax
 ccx      common/paramscl/sclp, sclc, sclnu, sclmu
@@ -130,7 +130,8 @@ cxx      common/param/ap, ac
       common /fnmin/ fmin
       common /skip/iskip
 c
-      real(8) :: pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f, aKrmax
+      double precision pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f,
+     1                 aKrmax
 c
       data pi/3.14159265358979d0/
 cc      dimension b(4),g(4),h(4)
@@ -219,29 +220,29 @@ C     driver for routine qgaus
 
 cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
-      real(8) :: ri, Fr, dFr
+      double precision ri, Fr, dFr
 c      common/distance/r0
 c      common/case/kk
-      real(8) :: x2, ap, ac
+      double precision x2, ap, ac
       common/interval/x2
 cxx      common/param/ap, ac
       common/param1/ap, ac
-      integer :: kk
-      real(8) :: r0
+      integer kk
+      double precision r0
       common/distancep/r0
       common/casep/kk
 !$omp threadprivate(/distancep/)
 !$omp threadprivate(/casep/)
-      real(8) :: x1, ss, tt, uu, Freps1, Freps2, 
-     1           xxm, xxr, xdx, xss, yy1, yy2, yy3, hMP1, hMP2
+      double precision x1, ss, tt, uu, Freps1, Freps2,
+     1                 xxm, xxr, xdx, xss, yy1, yy2, yy3, hMP1, hMP2
       common/param2/x1, ss, tt, uu, Freps1, Freps2
       common/param4/xxm, xxr, xdx, xss, yy1, yy2, yy3, hMP1, hMP2
 !$omp threadprivate(/param2/)
 !$omp threadprivate(/param4/)
 c
 cx      INTEGER NVAL
-      integer :: NVAL
-      real(8) :: eps, pi, delta
+      integer NVAL
+      double precision eps, pi, delta
 c      REAL X1,X2
 c      PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
@@ -362,10 +363,10 @@ cx      real*8 FUNCTION ipfuncMP(x,y)
 cx      implicit real*8(a-h,o-z)
 cxx      common/distance/r0
 cxx      common/case/kk
-cd      real(8) :: x, y
-      real(8) :: x, y
-      integer :: kk
-      real(8) :: r0, ap, ac, qx, qy
+cd      double precision x, y
+      double precision x, y
+      integer kk
+      double precision r0, ap, ac, qx, qy
       common/distancep/r0
       common/casep/kk
 !$omp threadprivate(/distancep/)
@@ -377,7 +378,7 @@ cxx      common/param/ap, ac
 !$omp threadprivate(/param3/)
 c
 c      REAL x,y
-      real(8) :: pi, ak, xyr0
+      double precision pi, ak, xyr0
       pi = 3.14159265358979d0
 c     p=1.5d0
 c     c=0.005d0

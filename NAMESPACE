@@ -1,9 +1,10 @@
-useDynLib(NScluster, .registration = TRUE)
+useDynLib(NScluster, .registration = TRUE, .fixes = "C_")
 
 importFrom("graphics", "abline", "par", "plot", "title", "legend", "axis",
            "points", "rect")
 importFrom("stats", "coef", "quantile", "sd", "lm", "runif")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar")
+importFrom("methods", "is")
 
 export(sim.cppm, mple.cppm, palm.cppm, boot.mple)
 

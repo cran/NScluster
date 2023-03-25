@@ -40,22 +40,30 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
     nu <- pa[2]
     sigma <- pa[3]
 
-    z <- .Call("smplxThom",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(ty),
-               as.double(mu),
-               as.double(nu),
-               as.double(sigma),
-               as.double(eps),
-               as.integer(itmax),
-               as.integer(itmax1),
-               as.integer(ipmax),
-               as.integer(ipflg))
+    z <- .Fortran(C_smplxthom,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(ty),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(sigma),
+                  as.double(eps),
+                  as.integer(itmax),
+                  as.integer(itmax1),
+                  as.integer(ipmax),
+                  fn = double(ipmax),
+                  mple = double(n*ipmax),
+                  xx = double(n*itmax1),
+                  std = double(itmax1),
+                  f = double(itmax1),
+                  itr = integer(1),
+                  nip = integer(1),
+                  ipr = integer(ipmax),
+                  as.integer(ipflg))
 
-    nip <- z[[7L]]
-    mples <- array(z[[2L]], dim = c(ipmax, n))
+    nip <- z$nip
+    mples <- array(z$mple, dim = c(ipmax, n))
     mple <- mples[nip, 1:n]
 
   } else if (model == "IP") {
@@ -71,25 +79,33 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
     p <- pa[3]
     c <- pa[4]
 
-    z <- .Call("smplxIP",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.integer(skip),
-               as.double(ty),
-               as.double(mu),
-               as.double(nu),
-               as.double(p),
-               as.double(c),
-               as.double(uplimit),
-               as.double(eps),
-               as.integer(itmax),
-               as.integer(itmax1),
-               as.integer(ipmax),
-               as.integer(ipflg))
+    z <- .Fortran(C_smplxip,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.integer(skip),
+                  as.double(ty),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(p),
+                  as.double(c),
+                  as.double(uplimit),
+                  as.double(eps),
+                  as.integer(itmax),
+                  as.integer(itmax1),
+                  as.integer(ipmax),
+                  fn = double(ipmax),
+                  mple = double(n*ipmax),
+                  xx = double(n*itmax1),
+                  std = double(itmax1),
+                  f = double(itmax1),
+                  itr = integer(1),
+                  nip = integer(1),
+                  ipr = integer(ipmax),
+                  as.integer(ipflg))
 
-    nip <- z[[7L]]
-    mples <- array(z[[2L]], dim = c(ipmax, n))
+    nip <- z$nip
+    mples <- array(z$mple, dim = c(ipmax, n))
     mple <- mples[nip, 1:n]
 
   } else if (model == "TypeA") {
@@ -104,26 +120,34 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
     sigma1 <- pa[4]
     sigma2 <- pa[5]
 
-    z <- .Call("smplxA", 
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.integer(skip),
-               as.double(ty),
-               as.double(mu),
-               as.double(nu),
-               as.double(a),
-               as.double(sigma1),
-               as.double(sigma2),
-               as.double(uplimit),
-               as.double(eps),
-               as.integer(itmax),
-               as.integer(itmax1),
-               as.integer(ipmax),
-               as.integer(ipflg))
+    z <- .Fortran(C_smplxa,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.integer(skip),
+                  as.double(ty),
+                  as.double(mu),
+                  as.double(nu),
+                  as.double(a),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.double(uplimit),
+                  as.double(eps),
+                  as.integer(itmax),
+                  as.integer(itmax1),
+                  as.integer(ipmax),
+                  fn = double(ipmax),
+                  mple = double(n*ipmax),
+                  xx = double(n*itmax1),
+                  std = double(itmax1),
+                  f = double(itmax1),
+                  itr = integer(1),
+                  nip = integer(1),
+                  ipr = integer(ipmax),
+                  as.integer(ipflg))
 
-    nip <- z[[7L]]
-    mples <- array(z[[2L]], dim = c(ipmax, n))
+    nip <- z$nip
+    mples <- array(z$mple, dim = c(ipmax, n))
     mple <- mples[nip, 1:n]
 
   } else if (model == "TypeB") {
@@ -138,24 +162,32 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
     sigma1 <- pa[4]
     sigma2 <- pa[5]
 
-    z <- .Call("smplxB",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(ty),
-               as.double(mu1),
-               as.double(mu2),
-               as.double(nu),
-               as.double(sigma1),
-               as.double(sigma2),
-               as.double(eps),
-               as.integer(itmax),
-               as.integer(itmax1),
-               as.integer(ipmax),
-               as.integer(ipflg))
+    z <- .Fortran(C_smplxb,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(ty),
+                  as.double(mu1),
+                  as.double(mu2),
+                  as.double(nu),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.double(eps),
+                  as.integer(itmax),
+                  as.integer(itmax1),
+                  as.integer(ipmax),
+                  fn = double(ipmax),
+                  mple = double(n*ipmax),
+                  xx = double(n*itmax1),
+                  std = double(itmax1),
+                  f = double(itmax1),
+                  itr = integer(1),
+                  nip = integer(1),
+                  ipr = integer(ipmax),
+                  as.integer(ipflg))
 
-    nip <- z[[7L]]
-    mples <- array(z[[2L]], dim = c(ipmax, n))
+    nip <- z$nip
+    mples <- array(z$mple, dim = c(ipmax, n))
     pp <- mples[nip, 1:n]
     mple <- c(pp[1]*pp[3], pp[1]*(1-pp[3]), pp[2], pp[4], pp[5])
 
@@ -172,25 +204,33 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
     sigma1 <- pa[5]
     sigma2 <- pa[6]
 
-    z <- .Call("smplxC",
-              as.double(x),
-              as.double(y),
-              as.integer(np),
-              as.double(ty),
-              as.double(mu1),
-              as.double(mu2),
-              as.double(nu1),
-              as.double(nu2),
-              as.double(sigma1),
-              as.double(sigma2),
-              as.double(eps),
-              as.integer(itmax),
-              as.integer(itmax1),
-              as.integer(ipmax),
-              as.integer(ipflg))
+    z <- .Fortran(C_smplxc,
+                  as.double(x),
+                  as.double(y),
+                  as.integer(np),
+                  as.double(ty),
+                  as.double(mu1),
+                  as.double(mu2),
+                  as.double(nu1),
+                  as.double(nu2),
+                  as.double(sigma1),
+                  as.double(sigma2),
+                  as.double(eps),
+                  as.integer(itmax),
+                  as.integer(itmax1),
+                  as.integer(ipmax),
+                  fn = double(ipmax),
+                  mple = double(n*ipmax),
+                  xx = double(n*itmax1),
+                  std = double(itmax1),
+                  f = double(itmax1),
+                  itr = integer(1),
+                  nip = integer(1),
+                  ipr = integer(ipmax),
+                  as.integer(ipflg))
 
-    nip <- z[[7L]]
-    mples <- array(z[[2L]], dim = c(ipmax, n))
+    nip <- z$nip
+    mples <- array(z$mple, dim = c(ipmax, n))
     pp <- mples[nip, 1:n]
     mple <- c(pp[1] * pp[3] / pp[2],
               pp[1] * (1 - pp[3]) * pp[4] / (pp[2] * pp[5]),
@@ -198,28 +238,28 @@ mple.cppm <- function(model = "Thomas", xy.points, pars = NULL, eps = 0.001,
 
   }
 
-  ipri <- z[[8L]][1:nip]
+  ipri <- z$ipr[1:nip]
   names(mple) <- pname
   mples <- mples[1:nip, 1:n]
   if (nip != 1)
     mples <- data.frame(mples)
   names(mples) <- pname.org
 
-  it1 <- z[[6L]]
+  it1 <- z$itr
   it2 <- 1
   if (ipflg == 2 || ipflg == 3)
     it2 <- it1
-  xx <- array(z[[3L]], dim = c(n, itmax1))
+  xx <- array(z$xx, dim = c(n, itmax1))
 
-  f <- z[[5L]][1:it2]
+  f <- z$f[1:it2]
   para <- xx[1:n, 1:it2]
-  std <- z[[4L]][1:it2]
+  std <- z$std[1:it2]
   param <- data.frame(t(para))
   names(param) <- pname.org
   aic <- 2 * f[it2] + 2 * n
 
   out <- list(mple = mple, log.mpl = -f[it2], aic = aic, 
-             process1 = list(cflg = ipri, logl = z[[1L]][1:nip], mples = mples),
+             process1 = list(cflg = ipri, logl = z$fn[1:nip], mples = mples),
              process2 = list(logl = f, stderr = std, pa.normal = param),
              input.val = list(model = model, points = xy.points, pa.init = pa,
                               eps = eps, uplimit = uplimit, skip = skip))
@@ -303,19 +343,21 @@ nonpara.palm <- function(xy.points, log = "xy") {
   rmax <- r1 / delta
   jmax <- as.integer(rmax)
 
-  z <- .Call("palmT",
-               as.double(x),
-               as.double(y),
-               as.integer(np),
-               as.double(delta),
-               as.double(ty),
-               as.double(mu),
-               as.double(nu),
-               as.double(sigma),
-               as.integer(m),
-               as.integer(jmax))
+  z <- .Fortran(C_palmt,
+                as.double(x),
+                as.double(y),
+                as.integer(np),
+                as.double(delta),
+                as.double(ty),
+                as.double(mu),
+                as.double(nu),
+                as.double(sigma),
+                as.integer(m),
+                as.integer(jmax),
+                palm = double(jmax),
+                palm1 = double(m*jmax))
 
-  palm <- z[[1L]]
+  palm <- z$palm
   r <- rep(1:jmax) * delta
 
   n <- length(r)

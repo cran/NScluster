@@ -1,8 +1,8 @@
 ccx      subroutine simBf(ix,iy,iz,ty,amu1,amu2,anu1,s1,s2,
-      subroutine simBf(ix,ty,amu1,amu2,anu1,s1,s2,
-     & m1,ncl1,x1,y1,xx1,yy1,m2,ncl2,x2,y2,xx2,yy2,mmax,nmax,ier)
+      subroutine simB(ix,ty,amu1,amu2,anu1,s1,s2,m1,ncl1,x1,y1,xx1,yy1,
+     & m2,ncl2,x2,y2,xx2,yy2,mmax,nmax,ier)
 c
-      include 'NScluster_f.h'
+      include 'NScluster.h'
 c
 cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
@@ -19,15 +19,16 @@ cx      dimension  xcl2(mmax,nmax), ycl2(mmax,nmax)
 cx      dimension xx1(mmax*nmax), yy1(mmax*nmax)
 cx      dimension xx2(mmax*nmax), yy2(mmax*nmax)
 cx      dimension ncl1(mmax), ncl2(nmax)
-ccx      integer :: ix, iy, iz, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax),
+ccx      integer ix, iy, iz, m1, m2, mmax, nmax, ncl1(mmax), ncl2(mmax),
 ccx     1           ier
-      integer :: ix, m1, m2, mmax, nmax, ncl1(mmax), ncl2(nmax), ier
-      real(8) :: ty, amu1, amu2, anu1, s1, s2, x1(mmax), y1(mmax),
-     1           xx1(mmax*nmax), yy1(mmax*nmax), x2(mmax), y2(mmax),
-     2           xx2(mmax*nmax), yy2(mmax*nmax)
-      real(8) :: xcl1(mmax,nmax), ycl1(mmax,nmax), xcl2(mmax,nmax),
-     1           ycl2(mmax,nmax), pi, r1, r2, theta1, theta2, random,
-     2           xcl1ij , ycl1ij , xcl2ij , ycl2ij
+      integer ix, m1, m2, mmax, nmax, ncl1(mmax), ncl2(mmax), ier
+      double precision ty, amu1, amu2, anu1, s1, s2, x1(mmax), y1(mmax),
+     1                 xx1(mmax*nmax), yy1(mmax*nmax), x2(mmax),
+     2                 y2(mmax), xx2(mmax*nmax), yy2(mmax*nmax)
+      double precision xcl1(mmax,nmax), ycl1(mmax,nmax),
+     1                 xcl2(mmax,nmax), ycl2(mmax,nmax), pi, r1, r2,
+     2                 theta1, theta2, random, xcl1ij, ycl1ij, xcl2ij,
+     3                 ycl2ij
 c
       pi=3.14159265358979d0
 c
