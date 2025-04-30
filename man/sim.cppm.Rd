@@ -33,8 +33,7 @@ sim.cppm(model = "Thomas", pars, seed = NULL)
   Inverse-power type models, and the extended Thomas models of type A, B, and C.
 
   \itemize{
-    \item{\code{"Thomas" }}{
-      (Thomas model)
+    \item{\code{"Thomas" } (Thomas model)
 
 	  The parameters of the model are as follows: 
       \itemize{
@@ -87,8 +86,7 @@ sim.cppm(model = "Thomas", pars, seed = NULL)
     }
   }
   \itemize{
-    \item{\code{"IP"} }{
-	  (Inverse-power type model)
+    \item{\code{"IP"} (Inverse-power type model)
 
 	  The parameters of the model are as follows: 
 	  \itemize{
@@ -120,8 +118,7 @@ sim.cppm(model = "Thomas", pars, seed = NULL)
     }
   }
   \itemize{
-    \item{\code{"TypeA"} }{
-      (Type A model)
+    \item{\code{"TypeA"} (Type A model)
 
       The parameters of the model are as follows: 
 	  \itemize{
@@ -148,8 +145,7 @@ sim.cppm(model = "Thomas", pars, seed = NULL)
     }
   }
   \itemize{
-    \item{\code{"TypeB"} }{
-      (Type B model)
+    \item{\code{"TypeB"} (Type B model)
 
 	  The TypeB is a superposed Thomas model. The parameters of the model are as
       follows: 
@@ -192,8 +188,7 @@ sim.cppm(model = "Thomas", pars, seed = NULL)
     }
   }
   \itemize{
-    \item{\code{"TypeC"} }{
-      (Type C model)
+    \item{\code{"TypeC"} (Type C model)
 
 	  The TypeC is a superposed Thomas model. The parameters of the model are as
       follows: 

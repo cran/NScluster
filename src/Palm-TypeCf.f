@@ -9,13 +9,15 @@ cc       dimension  nc(1000),palm(1000),palm1(1000,10)
        integer np, m, jmax
        double precision x(np), y(np), delta, ty1, alam(m), anu1(m),
      1                  a(m), s1(m), s2(m), palm(jmax), palm1(jmax,m)
-       double precision tx, ty
 cx       dimension  RR(np*np)
 cx       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
 cx       dimension  alam(m),anu1(m),a(m),s1(m),s2(m)
 cc       common/events/np
+c common
+       double precision tx, ty
        common / sizes / tx,ty
-       integer nc(jmax)
+c local
+       integer i, id, j, k, NN, nc(jmax)
        double precision RR(np*np), pi, t, r, anu2, e1j, e2j
 cc       character*50 fname
 cc       open(2,file='TypeCparam.palm')

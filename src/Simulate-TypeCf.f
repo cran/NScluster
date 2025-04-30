@@ -26,6 +26,8 @@ ccx     1           ier
      1                 y1(mmax), xx1(mmax*nmax), yy1(mmax*nmax),
      2                 x2(mmax), y2(mmax), xx2(mmax*nmax),
      3                 yy2(mmax*nmax)
+c local
+      integer i, j, jx1, jx2, jy1, jy2, np, np1, np2
       double precision xcl1(mmax,nmax), ycl1(mmax,nmax),
      1                 xcl2(mmax,nmax), ycl2(mmax,nmax), pi, r1, r2,
      2                 theta1, theta2, random, xcl1ij, ycl1ij, xcl2ij,

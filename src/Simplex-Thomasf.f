@@ -24,18 +24,15 @@ c
 c program starts. ----------------------------------------------------
 c
 cc      parameter   (maxh=6, maxh5=maxh+5)
-      parameter   (n=3)
+      integer, parameter :: n=3
 c
 cx      implicit real*8 (a-h, o-z)
       integer np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax), ipflag
       double precision x(np), y(np), ty, sclmu1, sclnu1, scls1, eps,
      1                 fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
      2                 eps1(itmax1), f(itmax1)
-      double precision sclmu, sclnu, scls, fmin
 ccx      common/paramscl/sclmu, sclnu, scls
-      common/tparam/sclmu, sclnu, scls
 cc      common / sizes / tx,ty
-      common /fnmin/ fmin
 cc      common /fname/filea
 cc      character*50 filea
 cx      real*8 sclmu,sclnu,scls
@@ -48,8 +45,14 @@ c
 cx      dimension  x(np), y(np), rr(np**2)
 cx      dimension  eps1(itmax1)
 cx      dimension  ipri(ipmax), fn(ipmax), mples(ipmax,n)
+c common
       integer iskip
+      double precision sclmu, sclnu, scls, fmin
+      common /tparam/sclmu, sclnu, scls
       common /skip/iskip
+      common /fnmin/fmin
+c local
+      integer nn
       double precision dist, rr(np**2), tx
 c
       fmin = 1.d10
@@ -106,6 +109,7 @@ cx      implicit real * 8 (a-h,o-z)
       integer n, nn, nip, ipmax, jpri(ipmax), ipflag
       double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
 c
+c common
       integer np
       double precision ff, aic, rmin, rmax, sclmu, sclnu, scls, fmin
 cc      common/datpar/ nn
@@ -115,8 +119,10 @@ cc      common/xyod/rr(9234567),th(9234567)
 cxx      common/paramscl/sclmu, sclnu, scls
       common/tparam/sclmu, sclnu, scls
       common/events/np
-      common /fnmin/ fmin
+      common /fnmin/fmin
 c
+c local
+      integer i, ier, ipri
       double precision pi, mu, nu, s, sum, lambda, s24, nupis, f, fs1,
      1                 ainteg
       data pi/3.14159265358979d0/

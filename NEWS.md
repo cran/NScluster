@@ -1,3 +1,18 @@
+# NScluster 1.3.6-4
+
+* Fixed Fortran compilation errors reported as ERROR in CRAN package check results.
+
+
+# NScluster 1.3.6-3
+
+* Fixed problems with Rd files reported as NOTE in CRAN package check results.
+
+
+# NScluster 1.3.6-2
+
+* Specified all variable types explicitly instead of using implicit variable types.
+
+
 # NScluster 1.3.6
 
 * Removed C wrapper functions and registered entry points for the routines accessed by the `.Fortran` interface to call Fortran subroutines.

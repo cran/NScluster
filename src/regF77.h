@@ -21,6 +21,7 @@
 */
 
 #include <R.h>
+#include <limits.h>
 #include <Rinternals.h>
 #include <libintl.h>
 

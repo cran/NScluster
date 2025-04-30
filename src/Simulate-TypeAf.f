@@ -15,6 +15,8 @@ ccx      integer ix, iy, iz, npts, m, ncl(m), n, ier
       integer ix, npts, m, ncl(m), n, ier
       double precision ty, amu, anu, a, sig1, sig2, x(m), y(m),
      1                 xcl(m,n), ycl(m,n)
+c local
+      integer i, j, jx, jx2, jy, jy2, np
       double precision pi, r, theta, xclij, yclij, xclij2, yclij2,
      1                 choice, random
 c

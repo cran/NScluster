@@ -9,6 +9,7 @@ C     driver for routine qgaus
       integer np, m, jmax
       double precision x(np), y(np), delta, ty1, x22, amu(m), anu(m),
      1                 p1(m), c1(m), palm(jmax), palm1(jmax,m)
+c common
       integer kk
       double precision r0, p, c, tx, ty
       common/distance/r0
@@ -21,7 +22,8 @@ cc      dimension  nc(1000),palm(1000),palm1(1000,10)
 cx      dimension  x(np),y(np), RR(np*np)
 cx      dimension  nc(jmax),palm(jmax),palm1(jmax,m)
 cx      dimension  amu(m),anu(m),p1(m),c1(m)
-      integer nc(jmax), NVAL, i
+c local
+      integer i, id, j, k,nn, nc(jmax), NVAL
       double precision RR(np*np), x2, pi, t, r, x1, ss, tt, uu, Fr, eps,
      1                 Freps1, Freps2, dFr
 cc      character*50 fname
@@ -29,7 +31,8 @@ cx      INTEGER NVAL
 c     PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
 cc      EXTERNAL func
-      EXTERNAL pipfunc
+cxx      EXTERNAL pipfunc
+      double precision, EXTERNAL :: pipfunc
 cc      open(2,file='IPparam.palm')
 cc      read(2,2) fname
 cc    2 format(a)

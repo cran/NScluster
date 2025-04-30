@@ -6,9 +6,10 @@ c
 c
 cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
-      integer np,m, jmax
+      integer np, m, jmax
       double precision x(np), y(np), delta, ty1, x2, amu(m), anu(m),
      1                 aa(m), ss1(m), ss2(m), palm(jmax), palm1(jmax,m)
+c common
       integer kk 
       double precision r0, a, s1, s2, tx, ty
       common/distance/r0
@@ -25,11 +26,12 @@ cc      character*50 fname
 cx      INTEGER NVAL
 c     PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
-      integer nc(jmax), NVAL, i
+      integer i, id, j, k, NN, NVAL, nc(jmax)
       double precision RR(np*np), pi, t, r, x1, ss, tt, uu, Fr, eps,
      1                 Freps1, Freps2, dFr
 c      EXTERNAL func
-      EXTERNAL pafunc
+cxx      EXTERNAL pafunc
+      double precision, EXTERNAL :: pafunc
 cc      open(2,file='TypeAparam.palm')
 cc      read(2,2) fname
 cc    2 format(a)

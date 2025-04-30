@@ -25,19 +25,22 @@ c program starts. ------------------------------------------------------
 c
 cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
-      parameter   (n=5)
+      integer, parameter :: n=5
 c
       integer np, iskip1, itmax, itmax1, ipmax, iter, nip, ipri(ipmax),
      1        ipflag
       double precision x(np), y(np), ty, sclmu1, sclnu1, scla1, scls11,
      1                 scls22, x22, eps, fn(ipmax), mples(ipmax,n), 
      2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
+c common
       integer iskip
       double precision scla, scls1, scls2, sclnu, sclmu, fmin, x2
       double precision dist, rr(np**2), tx
+c local
+      integer nn
 cxx      common/paramscl/scla, scls1, scls2, sclnu, sclmu
       common/aparam/scla, scls1, scls2, sclnu, sclmu
-      common /fnmin/ fmin
+      common /fnmin/fmin
 cc      common /fname/filea
 cc      character*50 filea
 cc      common / sizes / tx,ty
@@ -47,7 +50,8 @@ cc      real*8 scla,scls1,scls2,sclnu,sclmu
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
-      external   afunctMP
+cxx      external   afunctMP
+      double precision, EXTERNAL :: afunctMP
 c
       fmin = 1.d10
 ***************************
@@ -110,10 +114,14 @@ c---------------------------------------------------------------------
 cx      implicit real * 8 (a-h,o-z)
       integer n, nn, nip, ipmax, jpri(ipmax), ipflag
       double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
-c
+c common
       integer np, iskip
       double precision ff, aic, rmin, rmax, scla, scls1, scls2, sclnu,
      1                 sclmu, a, s1,s2, fmin
+c local
+      integer i, ier, ipri
+      double precision pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f,
+     1                 aKrmax
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       common/ddd/ff, aic
@@ -122,11 +130,8 @@ cxx      common/paramscl/scla, scls1, scls2, sclnu, sclmu
       common/aparam/scla, scls1, scls2, sclnu, sclmu
       common/param/a, s1, s2
       common/events/np
-      common /fnmin/ fmin
+      common /fnmin/fmin
       common/skip/iskip
-c
-      double precision pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f,
-     1                 aKrmax
 c
       data pi/3.14159265358979d0/
 cc      dimension b(5),g(5),h(5)
@@ -220,13 +225,13 @@ C     driver for routine qgaus
 cxx      common/distance/r0
 cxx      common/case/kk
       double precision ri, Fr, dFr
-      double precision x2, a, s1, s2
+c common
+      integer kk
+      double precision x2, a, s1, s2, r0
       common/interval/x2
 ***************************************************************** 
       common/param/a, s1, s2
 ***************************************************************** 
-      double precision r0
-      integer kk
       common/distancep/r0
       common/casep/kk
 !$omp threadprivate(/distancep/)
@@ -239,14 +244,16 @@ cxx      common/case/kk
 !$omp threadprivate(/param4/)
 c
 cx      INTEGER NVAL
-      integer NVAL
-      double precision delta, eps
 c      REAL X1,X2
 c      PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
 c      REAL dx,func,ss,x
 cc      EXTERNAL func
-      EXTERNAL afuncMP
+c local
+      integer NVAL
+      double precision delta, eps
+cxx      EXTERNAL afuncMP
+      double precision, EXTERNAL :: afuncMP
 c
       r0 = ri
 c
@@ -316,8 +323,9 @@ cc      real*8 FUNCTION func(x,y)
 cx      real*8 FUNCTION afuncMP(x,y)
       DOUBLE PRECISION FUNCTION afuncMP(x, y)
 cx      implicit real*8(a-h,o-z)
-cd      double precision x, y
+c      REAL x,y
       double precision x, y
+c common
       integer kk
       double precision r0, a, s1, s2, qx, qy
 cxx      common/distance/r0
@@ -332,7 +340,7 @@ c      common/param/p,c
 ***************************************************************** 
       common/param3/qx, qy
 !$omp threadprivate(/param3/)
-c      REAL x,y
+c local
       double precision pi, xyr0
       pi = 3.14159265358979d0
 c     p=1.5d0

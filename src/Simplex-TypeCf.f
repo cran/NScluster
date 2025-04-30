@@ -24,14 +24,14 @@ c
 c program starts. ------------------------------------------------------
 c
 cc      parameter   (maxh=6, maxh5=maxh+5)
-      parameter   (n=5)
+      integer, parameter :: n=5
 c
 cx      implicit real * 8 (a-h,o-z)
       integer np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax), ipflag
       double precision x(np), y(np), ty1, mu1, mu2, nu1, nu2, scls11,
      1                 scls22, eps, fn(ipmax), mples(ipmax,n),
      2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
-c
+c common
       integer iskip
       double precision scllam, scla, sclnu1, scls1, scls2, fmin, tx, ty
 cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
@@ -45,6 +45,8 @@ cc      character*50 filea
 cx      real*8 scllam,scla,sclnu1,sclnu2,scls1,scls2
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
+c local
+      integer nn
       double precision dist, rr(np**2)
 cc      external   funct
       external   cfunctMP
@@ -113,7 +115,7 @@ c-----------------------------------------------------------------------
 cx      implicit real * 8 (a-h,o-z)
       integer n, nn, nip, ipmax, jpri(ipmax), ipflag
       double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
-c
+c common
       integer np
       double precision ff, aic, rmin, rmax, scllam, scla, sclnu1,
      1                 scls1, scls2, fmin
@@ -125,7 +127,8 @@ cxx      common/paramscl/scllam, scla, sclnu1, sclnu2, scls1, scls2
       common/cparam/scllam, scla, sclnu1, scls1, scls2
       common/events/np
       common /fnmin/ fmin
-c
+c local
+      integer i, ier, ipri
       double precision pi, eps, alam, a, a1, a2, nu1, nu2, s1, s2, se,
      1                 sum, s124, s224, exp1rmax, exp2rmax, exp1i,
      2                 exp2i, f, fs1, ainteg1, ainteg2

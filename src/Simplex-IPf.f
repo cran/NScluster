@@ -25,30 +25,35 @@ c program starts. ------------------------------------------------------
 c
 cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
-      parameter   (n=4)
+      integer, parameter :: n=4
 c
-      integer iskip
-      double precision sclp,  sclc,  sclnu,  sclmu, fmin, x2
+      integer np, iskip1, itmax, itmax1, ipmax, iter, nip,
+     1        ipri(ipmax), ipflag
+      double precision x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1,
+     1                 x22, eps, fn(ipmax), mples(ipmax,n),
+     2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
 ccx      common/paramscl/sclp, sclc, sclnu, sclmu
-      common/paramip/sclp, sclc, sclnu, sclmu
-      common /fnmin/ fmin
 cc      common / sizes / tx,ty
-      common /skip/iskip
 cc      common /fname/filea
-      common/interval/x2
 cc      character*50 filea
 cx      real*8 sclp,sclc,sclnu,sclmu
 cc      integer    n
 cc      real*8     xinit(maxh), dist, eps, f
 cc      external   funct
 cx      real*8     xinit(n,itmax1), dist, eps, f(itmax1)
-      integer np, iskip1, itmax, itmax1, ipmax, iter, nip,
-     1        ipri(ipmax), ipflag
-      double precision x(np), y(np), ty, sclmu1, sclnu1, sclp1, sclc1,
-     1                 x22, eps, fn(ipmax), mples(ipmax,n),
-     2                 xinit(n,itmax1), eps1(itmax1), f(itmax1)
+c common
+      integer iskip
+      double precision sclp,  sclc,  sclnu,  sclmu, fmin, x2
+c local
+      integer nn
       double precision dist, rr(np**2), tx
-      external   ipfunctMP
+c
+      common /paramip/sclp, sclc, sclnu, sclmu
+      common /fnmin/fmin
+      common /skip/iskip
+      common /interval/x2
+cxx      external   ipfunctMP
+      double precision, external :: ipfunctMP
 c
 cx      dimension  x(np), y(np), rr(np**2)
 cx      dimension  eps1(itmax1)
@@ -116,22 +121,24 @@ cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
       integer n, nn, nip, ipmax, jpri(ipmax), ipflag
       double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
-c
+c common
       integer np, iskip
       double precision ff, aic, rmin, rmax, sclp, sclc, sclnu, sclmu,
      1                 ap, ac, fmin
+c local
+      integer i, ier, ipri
+      double precision pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f,
+     1                 aKrmax
+c
       common/ddd/ff, aic
       common/range/rmin, rmax
 ccx      common/paramscl/sclp, sclc, sclnu, sclmu
 cxx      common/param/ap, ac
-      common/paramip/sclp, sclc, sclnu, sclmu
-      common/param1/ap, ac
-      common/events/np
-      common /fnmin/ fmin
+      common /paramip/sclp, sclc, sclnu, sclmu
+      common /param1/ap, ac
+      common /events/np
+      common /fnmin/fmin
       common /skip/iskip
-c
-      double precision pi, nu, mu, lambda, nu2pi, sum, dFr, Frmax, f,
-     1                 aKrmax
 c
       data pi/3.14159265358979d0/
 cc      dimension b(4),g(4),h(4)
@@ -216,19 +223,16 @@ cc      subroutine power(ri,dFr,Fr)
       subroutine ippowerMP(ri, Fr, dFr)
 c
 cx      implicit real*8(a-h,o-z)
-C     driver for routine qgaus
-
-cx      implicit real*8(a-h,o-z)
-C     driver for routine qgaus
       double precision ri, Fr, dFr
+C     driver for routine qgaus
 c      common/distance/r0
 c      common/case/kk
-      double precision x2, ap, ac
-      common/interval/x2
-cxx      common/param/ap, ac
-      common/param1/ap, ac
+c      common/param/ap, ac
+c common
       integer kk
-      double precision r0
+      double precision x2, ap, ac, r0
+      common/interval/x2
+      common/param1/ap, ac
       common/distancep/r0
       common/casep/kk
 !$omp threadprivate(/distancep/)
@@ -241,6 +245,7 @@ cxx      common/param/ap, ac
 !$omp threadprivate(/param4/)
 c
 cx      INTEGER NVAL
+c local
       integer NVAL
       double precision eps, pi, delta
 c      REAL X1,X2
@@ -248,7 +253,8 @@ c      PARAMETER(X1=r0/2,X2=1.0,NVAL=10)
 cx      INTEGER i
 c      REAL dx,func,ss,x
 cc      EXTERNAL func
-      EXTERNAL ipfuncMP
+cxx      EXTERNAL ipfuncMP
+      double precision, EXTERNAL :: ipfuncMP
 c
       r0 = ri
 c
@@ -361,10 +367,12 @@ cc      real*8 FUNCTION func(x,y)
 cx      real*8 FUNCTION ipfuncMP(x,y)
       DOUBLE PRECISION FUNCTION ipfuncMP(x,y)
 cx      implicit real*8(a-h,o-z)
+c      REAL x,y
+      double precision x, y
 cxx      common/distance/r0
 cxx      common/case/kk
 cd      double precision x, y
-      double precision x, y
+c common
       integer kk
       double precision r0, ap, ac, qx, qy
       common/distancep/r0
@@ -377,7 +385,7 @@ cxx      common/param/ap, ac
       common/param3/qx, qy
 !$omp threadprivate(/param3/)
 c
-c      REAL x,y
+c local
       double precision pi, ak, xyr0
       pi = 3.14159265358979d0
 c     p=1.5d0

@@ -41,8 +41,7 @@ mple.cppm(model = "Thomas", xy.points, pars = NULL, eps = 0.001, uplimit = 0.3,
 
 \details{
   \itemize{
-    \item{\code{"Thomas"}}{
-      (Thomas model)
+    \item{\code{"Thomas"} (Thomas model)
 
       The Palm intensity function is given as follows:
 
@@ -66,8 +65,7 @@ mple.cppm(model = "Thomas", xy.points, pars = NULL, eps = 0.001, uplimit = 0.3,
 	}
   }
   \itemize{
-    \item{\code{"TypeB"}}{
-      (Type B model)
+    \item{\code{"TypeB"} (Type B model)
 
       The Palm intensity function is given as follows:
 
@@ -110,8 +108,7 @@ mple.cppm(model = "Thomas", xy.points, pars = NULL, eps = 0.001, uplimit = 0.3,
     }
   }
   \itemize{
-    \item{\code{"TypeC"}}{
-      (Type C model)
+    \item{\code{"TypeC"} (Type C model)
 
       The Palm intensity function is  given as follows:
 

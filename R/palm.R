@@ -277,7 +277,7 @@ plot.Palm <- function(x, ..., log = "xy") {
   if (n != 0)
     for (i in 1:n) {
       obj <- argh[[i]]
-      if (is(obj) != "Palm") {
+      if (is(obj, "Palm") == FALSE) {
         warning("Additional object is invalid 'class' and was ignored.",
                 call. = FALSE )
       } else if (all.equal(r, obj$r) != TRUE) {

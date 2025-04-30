@@ -15,6 +15,8 @@ cxx      integer ix, iy, iz, npts, mmax, ncl(mmax), nmax, ier
       integer ix, npts, mmax, ncl(mmax), nmax, ier
       double precision ty, amu, anu, p, c, x(mmax), y(mmax),
      1                 xcl(mmax,nmax), ycl(mmax,nmax)
+c local
+      integer i, j, jx, jy, np
       double precision pi, ak, r, theta, xclij, yclij, random
 c
         pi = 3.14159265358979d0

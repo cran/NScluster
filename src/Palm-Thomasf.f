@@ -9,13 +9,15 @@ cc       common/events/np
        integer np, m, jmax
        double precision x(np), y(np), delta, ty1, amu(m), anu(m), v(m),
      1                  palm(jmax), palm1(jmax,m)
+c common
        double precision tx, ty
        common / sizes / tx,ty
 cc       character*50 fname
 cx       dimension  x(np),y(np), RR(np*np)
 cx       dimension  amu(m),anu(m),v(m)
 cx       dimension  nc(jmax),palm(jmax),palm1(jmax,m)
-       integer nc(jmax)
+c local
+       integer i, id, j, k, nn, nc(jmax)
        double precision RR(np*np), pi, t, r, ae
 cc       open(2,file='Thomasparam.palm')
 cc       read(2,2) fname
@@ -95,11 +97,14 @@ c
 cx        implicit real*8(a-h,o-z)
         integer NN, np
         double precision RR(np*np), x(np), y(np)
+c common
         double precision tx, ty
 cc        common/events/np
         common / sizes / tx,ty
 cc        dimension  x(2000), y(2000), RR(4000000)
 cx        dimension  x(np), y(np), RR(np*np)
+c local
+        integer i, j, n
         double precision t1, XX, YY, R2
         t1=0.5d0
 c periodic boundary

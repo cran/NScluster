@@ -25,22 +25,25 @@ c program starts. ------------------------------------------------------
 c
 cx      implicit real * 8 (a-h,o-z)
 cc      parameter   (maxh=6, maxh5=maxh+5)
-      parameter   (n=5)
+      integer, parameter :: n=5
 c
       integer np, itmax, itmax1, ipmax, iter, nip, ipri(ipmax), ipflag
       double precision x(np), y(np), ty1, mu1, mu2, nu1, scls11, scls22,
      1                 eps, fn(ipmax), mples(ipmax,n), xinit(n,itmax1),
      2                 eps1(itmax1), f(itmax1)
+c common
       double precision sclmu, sclnu, scla1, scls1, scls2, fmin
       integer iskip
+c local
+      integer nn
       double precision dist, rr(np**2), tx, ty
 c
 cxx      common/paramscl/sclmu,sclnu,scla1,scls1,scls2
-      common/bparam/sclmu,sclnu,scla1,scls1,scls2
-      common /fnmin/ fmin
+      common /bparam/sclmu,sclnu,scla1,scls1,scls2
+      common /fnmin/fmin
 cc      common / sizes / tx,ty
 cc      common /fname/filea
-      common/skip/iskip
+      common /skip/iskip
 cc      character*50 filea
 cx      real*8 sclmu,sclnu,scla1,scls1,scls2
 cc      integer    n
@@ -111,10 +114,14 @@ c-----------------------------------------------------------------------
 cc      implicit real * 8 (a-h,o-z)
       integer n, nn, nip, ipmax, jpri(ipmax), ipflag
       double precision b(n), fn, r(nn), ffn(ipmax), mples(ipmax,n)
-c
+c common
       integer np
       double precision ff, aic, rmin, rmax, sclmu, sclnu, scla1, scls1,
      1                 scls2, fmin
+c local
+      integer i, ier, ipri
+      double precision pi, eps, mu, nu, a1, s1, s2, se, sum, lambda, f,
+     1                 s124, s224, fs1, ainteg1, ainteg2
 cc      common/datpar/ nn
 cc      common/xyod/rr(9234567),th(9234567)
 cx      dimension rr(nn)
@@ -125,8 +132,6 @@ cxx      common/paramscl/sclmu, sclnu, scla1, scls1, scls2
       common/events/np
       common /fnmin/ fmin
 c
-      double precision pi, eps, mu, nu, a1, s1, s2, se, sum, lambda, f,
-     1                 s124, s224, fs1, ainteg1, ainteg2
       data pi/3.14159265358979d0/
 cc      dimension b(5),g(5),h(5)
       pi = 3.14159265358979d0

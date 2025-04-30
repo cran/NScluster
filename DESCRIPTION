@@ -1,5 +1,5 @@
 Package: NScluster
-Version: 1.3.6-1
+Version: 1.3.6-4
 Title: Simulation and Estimation of the Neyman-Scott Type Spatial
         Cluster Models
 Authors@R: c(person("Ushio","Tanaka", role="aut", comment = "Fortran original"),
@@ -14,12 +14,12 @@ Description: Simulation and estimation for Neyman-Scott spatial cluster point
  interface is available. For more details see Tanaka, Saga and Nakano
  <doi:10.18637/jss.v098.i06>.
 License: GPL (>= 2)
-MailingList: Please send bug reports to ismrp@jasp.ism.ac.jp
+Contact: ismrp@jasp.ism.ac.jp
 NeedsCompilation: yes
-Packaged: 2023-03-25 10:51:50 UTC; msaga
+Packaged: 2025-04-29 05:50:03 UTC; msaga
 Author: Ushio Tanaka [aut] (Fortran original),
   Masami Saga [aut, cre],
   Junji Nakano [aut]
 Maintainer: Masami Saga <msaga@mtb.biglobe.ne.jp>
 Repository: CRAN
-Date/Publication: 2023-03-25 11:10:02 UTC
+Date/Publication: 2025-04-30 07:30:05 UTC
