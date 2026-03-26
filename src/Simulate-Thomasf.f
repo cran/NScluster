@@ -2,8 +2,6 @@ ccx      subroutine simThomf(ix,iy,iz,ty,amu,anu,sig,
       subroutine simThom(ix,ty,amu,anu,sig,npts,ncl,x,y,xcl,ycl,
      &                   mmax,nmax,ier)
 c
-      include 'NScluster.h'
-c
 cx       implicit real*8 (a-h, o-z)
 cc       common ix,iy,iz
 cc       dimension  x(100), y(100)

@@ -2,8 +2,6 @@ cxx      subroutine simIPf(ix,iy,iz,ty,amu,anu,p,c,
       subroutine simIP(ix,ty,amu,anu,p,c,npts,ncl,x,y,xcl,ycl,
      &                 mmax,nmax,ier)
 c
-      include 'NScluster.h'
-c
 cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
 cc      dimension  x(100), y(100)

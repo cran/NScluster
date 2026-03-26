@@ -1,3 +1,8 @@
+# NScluster 1.3.6-5
+
+* Changed package maintainer.
+
+
 # NScluster 1.3.6-4
 
 * Fixed Fortran compilation errors reported as ERROR in CRAN package check results.

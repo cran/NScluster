@@ -2,8 +2,6 @@ cc      PROGRAM xqgaus
       subroutine xqgausa(x,y,np,delta,ty1,x2,amu,anu,aa,ss1,ss2,m,jmax,
      $                   palm,palm1)
 c
-      include 'NScluster.h'
-c
 cx      implicit real*8(a-h,o-z)
 C     driver for routine qgaus
       integer np, m, jmax

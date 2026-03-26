@@ -2,8 +2,6 @@ ccx      subroutine simAf(ix,iy,iz,ty,amu,anu,a,sig1,sig2,
       subroutine simA(ix,ty,amu,anu,a,sig1,sig2,npts,ncl,x,y,xcl,ycl,
      &                m,n,ier)
 c
-      include 'NScluster.h'
-c
 cx      implicit real*8 (a-h, o-z)
 cc      common ix,iy,iz
 cc      dimension  x(1000), y(1000)

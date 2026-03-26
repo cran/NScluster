@@ -1,11 +1,16 @@
 Package: NScluster
-Version: 1.3.6-4
+Version: 1.3.6-5
 Title: Simulation and Estimation of the Neyman-Scott Type Spatial
         Cluster Models
-Authors@R: c(person("Ushio","Tanaka", role="aut", comment = "Fortran original"),
- person("Masami", "Saga", role=c("aut", "cre"), email="msaga@mtb.biglobe.ne.jp"),
- person("Junji", " Nakano", role="aut"))
-Depends: R (>= 3.0.0)
+Authors@R: c(person("Ushio", "Tanaka", role=c("aut", "cre"), email="utanaka@omu.ac.jp"),
+ person("Junji", "Nakano", role="aut"),
+ person("Masami", "Saga", role="aut"))
+Author: Ushio Tanaka [aut, cre],
+  Junji Nakano [aut],
+  Masami Saga [aut]
+Maintainer: Ushio Tanaka <utanaka@omu.ac.jp>
+Copyright: file COPYRIGHTS
+Depends: R (>= 4.0.0)
 Imports: graphics, stats, utils, methods
 Description: Simulation and estimation for Neyman-Scott spatial cluster point
  process models and their extensions, based on the methodology in Tanaka, Ogata,
@@ -14,12 +19,7 @@ Description: Simulation and estimation for Neyman-Scott spatial cluster point
  interface is available. For more details see Tanaka, Saga and Nakano
  <doi:10.18637/jss.v098.i06>.
 License: GPL (>= 2)
-Contact: ismrp@jasp.ism.ac.jp
 NeedsCompilation: yes
-Packaged: 2025-04-29 05:50:03 UTC; msaga
-Author: Ushio Tanaka [aut] (Fortran original),
-  Masami Saga [aut, cre],
-  Junji Nakano [aut]
-Maintainer: Masami Saga <msaga@mtb.biglobe.ne.jp>
+Packaged: 2026-03-25 08:43:12 UTC; msaga
 Repository: CRAN
-Date/Publication: 2025-04-30 07:30:05 UTC
+Date/Publication: 2026-03-26 08:20:19 UTC

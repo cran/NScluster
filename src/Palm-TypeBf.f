@@ -1,8 +1,6 @@
        subroutine palmb(x,y,np,delta,ty1,amu,anu,a,s1,s2,m,jmax,
      &                  palm,palm1)
 c
-      include 'NScluster.h'
-c
 cx       implicit real*8(a-h,o-z)
 cc       dimension  x(2000),y(2000), RR(4000000)
 cc       dimension  nc(1000),palm(1000),palm1(1000,10)

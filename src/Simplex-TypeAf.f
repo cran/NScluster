@@ -2,8 +2,6 @@
      &    scls11, scls22, x22, eps, itmax, itmax1, ipmax, fn, mples,
      &    xinit, eps1, f, iter, nip, ipri, ipflag)
 c
-      include 'NScluster.h'
-c
 c simplx:  simplex minimization subroutine.
 c minmax:  called by subroutine simplx. 
 c first:             "
